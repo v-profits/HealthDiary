@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Health Diary</string>
+
+    <string name="tab_readings">Readings</string>
+    <string name="tab_meds">Medicines</string>
+    <string name="tab_send">To doctor</string>
+
+    <string name="type_pressure">Blood pressure</string>
+    <string name="type_sugar">Blood sugar</string>
+    <string name="type_weight">Weight</string>
+    <string name="type_temperature">Temperature</string>
+    <string name="type_spo2">Oxygen (SpO2)</string>
+
+    <string name="unit_pressure">mmHg</string>
+    <string name="unit_sugar">mmol/L</string>
+    <string name="unit_weight">kg</string>
+    <string name="unit_temperature">°C</string>
+    <string name="unit_spo2" formatted="false">%</string>
+    <string name="pulse_value">pulse %1$d</string>
+
+    <string name="empty_readings">No entries yet. Tap + to add your first reading.</string>
+    <string name="empty_meds">Your medicine list is empty. Tap + to add a medicine.</string>
+
+    <string name="add_reading">New reading</string>
+    <string name="edit_reading">Edit reading</string>
+    <string name="new_med">New medicine</string>
+    <string name="edit_med">Edit medicine</string>
+
+    <string name="field_systolic">Upper (systolic)</string>
+    <string name="field_diastolic">Lower (diastolic)</string>
+    <string name="field_pulse">Pulse (optional)</string>
+    <string name="field_note">Note (optional)</string>
+
+    <string name="quick_hint">Say or type: pressure 135 over 80 pulse 72</string>
+    <string name="btn_mic">Voice</string>
+    <string name="btn_fill">Fill in</string>
+    <string name="voice_prompt">Say the reading, for example: pressure 135 over 80 pulse 72</string>
+    <string name="voice_unavailable">Voice input is not available on this phone. Tap the microphone on your keyboard and dictate into the field above.</string>
+    <string name="voice_not_understood">Could not understand the reading. Please enter the values by hand.</string>
+    <string name="heard">Heard: %1$s</string>
+    <string name="error_value">Please check the values you entered</string>
+
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_delete">Delete</string>
+    <string name="delete_confirm">Delete this entry?</string>
+
+    <string name="med_name">Name</string>
+    <string name="med_dose">Dose (for example, 4 mg)</string>
+    <string name="med_schedule">When to take (for example, morning)</string>
+    <string name="med_note">Note</string>
+
+    <string name="send_name">Your name for the doctor</string>
+    <string name="period_7">7 days</string>
+    <string name="period_14">14 days</string>
+    <string name="period_30">30 days</string>
+    <string name="period_all">All</string>
+    <string name="btn_share">Send to doctor</string>
+    <string name="btn_copy">Copy</string>
+    <string name="copied">Copied</string>
+    <string name="share_via">Send via</string>
+    <string name="disclaimer">The app only stores and sends your records. It gives no medical advice and does not replace a doctor. Data is kept on this phone.</string>
+
+    <string name="report_title">Health diary: %1$s</string>
+    <string name="report_title_noname">Health diary</string>
+    <string name="report_period">Period: %1$s – %2$s</string>
+    <string name="report_period_all">Period: all entries</string>
+    <string name="report_meds">Medicines:</string>
+    <string name="report_readings">Readings:</string>
+    <string name="report_none">no data</string>
+    <string name="report_avg">Average: %1$s</string>
+    <string name="report_footer">Entered by the patient in the Health Diary app. This is not a medical conclusion.</string>
+</resources>

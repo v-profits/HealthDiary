@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Дневник здоровья</string>
+
+    <string name="tab_readings">Показания</string>
+    <string name="tab_meds">Лекарства</string>
+    <string name="tab_send">Врачу</string>
+
+    <string name="type_pressure">Давление</string>
+    <string name="type_sugar">Сахар крови</string>
+    <string name="type_weight">Вес</string>
+    <string name="type_temperature">Температура</string>
+    <string name="type_spo2">Кислород (SpO2)</string>
+
+    <string name="unit_pressure">мм рт. ст.</string>
+    <string name="unit_sugar">ммоль/л</string>
+    <string name="unit_weight">кг</string>
+    <string name="unit_temperature">°C</string>
+    <string name="unit_spo2" formatted="false">%</string>
+    <string name="pulse_value">пульс %1$d</string>
+
+    <string name="empty_readings">Записей пока нет. Нажмите «+», чтобы добавить первое показание.</string>
+    <string name="empty_meds">Список лекарств пуст. Нажмите «+», чтобы добавить лекарство.</string>
+
+    <string name="add_reading">Новое показание</string>
+    <string name="edit_reading">Изменить показание</string>
+    <string name="new_med">Новое лекарство</string>
+    <string name="edit_med">Изменить лекарство</string>
+
+    <string name="field_systolic">Верхнее (систолическое)</string>
+    <string name="field_diastolic">Нижнее (диастолическое)</string>
+    <string name="field_pulse">Пульс (необязательно)</string>
+    <string name="field_note">Заметка (необязательно)</string>
+
+    <string name="quick_hint">Скажите или напишите: давление 135 на 80 пульс 72</string>
+    <string name="btn_mic">Голос</string>
+    <string name="btn_fill">Заполнить</string>
+    <string name="voice_prompt">Назовите показание, например: давление 135 на 80 пульс 72</string>
+    <string name="voice_unavailable">Голосовой ввод недоступен на этом телефоне. Нажмите значок микрофона на клавиатуре и продиктуйте в поле выше.</string>
+    <string name="voice_not_understood">Не удалось разобрать показание. Введите значения вручную.</string>
+    <string name="heard">Распознано: %1$s</string>
+    <string name="error_value">Проверьте введённые значения</string>
+
+    <string name="btn_save">Сохранить</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_delete">Удалить</string>
+    <string name="delete_confirm">Удалить запись?</string>
+
+    <string name="med_name">Название</string>
+    <string name="med_dose">Дозировка (например, 4 мг)</string>
+    <string name="med_schedule">Когда принимать (например, утром)</string>
+    <string name="med_note">Заметка</string>
+
+    <string name="send_name">Ваше имя для врача</string>
+    <string name="period_7">7 дней</string>
+    <string name="period_14">14 дней</string>
+    <string name="period_30">30 дней</string>
+    <string name="period_all">Всё</string>
+    <string name="btn_share">Отправить врачу</string>
+    <string name="btn_copy">Копировать</string>
+    <string name="copied">Скопировано</string>
+    <string name="share_via">Отправить через</string>
+    <string name="disclaimer">Приложение только хранит и пересылает ваши записи. Оно не даёт медицинских советов и не заменяет врача. Данные хранятся на этом телефоне.</string>
+
+    <string name="report_title">Дневник здоровья: %1$s</string>
+    <string name="report_title_noname">Дневник здоровья</string>
+    <string name="report_period">Период: %1$s – %2$s</string>
+    <string name="report_period_all">Период: все записи</string>
+    <string name="report_meds">Лекарства:</string>
+    <string name="report_readings">Показания:</string>
+    <string name="report_none">нет данных</string>
+    <string name="report_avg">Среднее: %1$s</string>
+    <string name="report_footer">Данные внесены пациентом в приложении «Дневник здоровья». Это не медицинское заключение.</string>
+</resources>
