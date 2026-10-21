@@ -5,6 +5,7 @@
     <string name="tab_readings">Показания</string>
     <string name="tab_meds">Лекарства</string>
     <string name="tab_send">Врачу</string>
+    <string name="tab_settings">Настройки</string>
 
     <string name="type_pressure">Давление</string>
     <string name="type_sugar">Сахар крови</string>
@@ -17,9 +18,20 @@
     <string name="unit_weight">кг</string>
     <string name="unit_temperature">°C</string>
     <string name="unit_spo2" formatted="false">%</string>
+    <string name="unit_bpm">уд/мин</string>
     <string name="pulse_value">пульс %1$d</string>
 
-    <string name="empty_readings">Записей пока нет. Нажмите «+», чтобы добавить первое показание.</string>
+    <string name="col_date">Дата</string>
+    <string name="col_part">Утро / вечер</string>
+    <string name="col_systolic">Верхнее</string>
+    <string name="col_diastolic">Нижнее</string>
+    <string name="col_pulse">Пульс</string>
+    <string name="col_meds">Лекарство</string>
+    <string name="col_note">Заметка</string>
+    <string name="part_morning">Утро</string>
+    <string name="part_evening">Вечер</string>
+
+    <string name="empty_readings">Записей этого типа пока нет. Нажмите «+», чтобы добавить показание.</string>
     <string name="empty_meds">Список лекарств пуст. Нажмите «+», чтобы добавить лекарство.</string>
 
     <string name="add_reading">Новое показание</string>
@@ -31,14 +43,15 @@
     <string name="field_diastolic">Нижнее (диастолическое)</string>
     <string name="field_pulse">Пульс (необязательно)</string>
     <string name="field_note">Заметка (необязательно)</string>
+    <string name="field_meds">Принятые лекарства</string>
+    <string name="meds_pick_empty">Добавьте лекарства на вкладке «Лекарства», и их можно будет отмечать здесь.</string>
 
-    <string name="quick_hint">Скажите или напишите: давление 135 на 80 пульс 72</string>
-    <string name="btn_mic">Голос</string>
-    <string name="btn_fill">Заполнить</string>
-    <string name="voice_prompt">Назовите показание, например: давление 135 на 80 пульс 72</string>
-    <string name="voice_unavailable">Голосовой ввод недоступен на этом телефоне. Нажмите значок микрофона на клавиатуре и продиктуйте в поле выше.</string>
-    <string name="voice_not_understood">Не удалось разобрать показание. Введите значения вручную.</string>
-    <string name="heard">Распознано: %1$s</string>
+    <string name="quick_label">Быстрый ввод фразой</string>
+    <string name="quick_placeholder">давление 135 на 80 пульс 72</string>
+    <string name="quick_not_parsed">Фраза не распознана. Введите значения в поля ниже.</string>
+    <string name="btn_voice_desc">Голосовой ввод</string>
+    <string name="voice_unavailable">Голосовой ввод недоступен на этом телефоне. Используйте микрофон на клавиатуре.</string>
+    <string name="voice_not_number">Число не распознано. Назовите число цифрами, например: 135.</string>
     <string name="error_value">Проверьте введённые значения</string>
 
     <string name="btn_save">Сохранить</string>
@@ -60,7 +73,7 @@
     <string name="btn_copy">Копировать</string>
     <string name="copied">Скопировано</string>
     <string name="share_via">Отправить через</string>
-    <string name="disclaimer">Приложение только хранит и пересылает ваши записи. Оно не даёт медицинских советов и не заменяет врача. Данные хранятся на этом телефоне.</string>
+    <string name="disclaimer">Приложение только хранит и пересылает ваши записи. Оно не даёт медицинских советов и не заменяет врача. Данные хранятся только на этом телефоне.</string>
 
     <string name="report_title">Дневник здоровья: %1$s</string>
     <string name="report_title_noname">Дневник здоровья</string>
@@ -71,4 +84,29 @@
     <string name="report_none">нет данных</string>
     <string name="report_avg">Среднее: %1$s</string>
     <string name="report_footer">Данные внесены пациентом в приложении «Дневник здоровья». Это не медицинское заключение.</string>
+
+    <string name="settings_theme">Тема</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="settings_language">Язык</string>
+    <string name="lang_system">Как в системе</string>
+    <string name="lang_ru">Русский</string>
+    <string name="lang_en">English</string>
+    <string name="settings_help">Инструкция пользователя</string>
+
+    <string name="help_1_title">Для чего приложение</string>
+    <string name="help_1_text">Дневник хранит ваши измерения (давление, пульс, сахар, вес, температуру, кислород) и список лекарств, а затем собирает отчёт, который можно отправить врачу в мессенджере. Приложение не даёт медицинских советов.</string>
+    <string name="help_2_title">Первые шаги</string>
+    <string name="help_2_text">1. Откройте вкладку «Лекарства» и добавьте свои лекарства: название, дозировку, время приёма.\n2. Откройте вкладку «Показания» и нажмите «+», чтобы внести первое измерение.</string>
+    <string name="help_3_title">Как добавить показание</string>
+    <string name="help_3_text">Выберите тип измерения и время суток (утро или вечер). Введите значения с клавиатуры или нажмите значок микрофона справа в поле и назовите число. Можно продиктовать всю фразу в поле быстрого ввода, например: «давление 135 на 80 пульс 72», и поля заполнятся сами. Отметьте принятые лекарства и нажмите «Сохранить».</string>
+    <string name="help_4_title">Голосовой ввод</string>
+    <string name="help_4_text">В каждом поле ввода справа есть значок микрофона. Он включает распознавание речи вашего телефона. Называйте числа цифрами, чётко и без пауз. Если на телефоне нет распознавания речи, используйте клавишу микрофона на клавиатуре. Перед сохранением всегда проверяйте распознанное значение.</string>
+    <string name="help_5_title">Таблица показаний</string>
+    <string name="help_5_text">Вкладка «Показания» показывает записи таблицей. Тип измерения выбирается сверху. Если таблица шире экрана, проведите по ней пальцем влево или вправо. Единицы измерения указаны в шапке столбцов, в ячейках только значения. Карандаш меняет запись, корзина удаляет её.</string>
+    <string name="help_6_title">Отправка врачу</string>
+    <string name="help_6_text">На вкладке «Врачу» впишите своё имя, выберите период и нажмите «Отправить врачу». Выберите мессенджер (Telegram, WhatsApp, MAX, почту и т. д.), затем врача. Кнопка «Копировать» копирует текст отчёта.</string>
+    <string name="help_7_title">Настройки и данные</string>
+    <string name="help_7_text">Тема: как в системе, светлая или тёмная. Язык: как в системе, русский или английский. Все данные хранятся только на этом телефоне и пропадут при удалении приложения, поэтому регулярно отправляйте отчёт врачу.</string>
 </resources>

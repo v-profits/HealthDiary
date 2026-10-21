@@ -135,28 +135,30 @@ private fun MedDialog(initial: Medication, onSave: (Medication) -> Unit, onDismi
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(
+                VoiceField(
                     value = name,
-                    onValueChange = { name = it },
-                    label = { Text(stringResource(R.string.med_name)) },
-                    singleLine = true
+                    onChange = { name = it },
+                    label = stringResource(R.string.med_name),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
+                VoiceField(
                     value = dose,
-                    onValueChange = { dose = it },
-                    label = { Text(stringResource(R.string.med_dose)) },
-                    singleLine = true
+                    onChange = { dose = it },
+                    label = stringResource(R.string.med_dose),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
+                VoiceField(
                     value = schedule,
-                    onValueChange = { schedule = it },
-                    label = { Text(stringResource(R.string.med_schedule)) },
-                    singleLine = true
+                    onChange = { schedule = it },
+                    label = stringResource(R.string.med_schedule),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
+                VoiceField(
                     value = note,
-                    onValueChange = { note = it },
-                    label = { Text(stringResource(R.string.med_note)) }
+                    onChange = { note = it },
+                    label = stringResource(R.string.med_note),
+                    singleLine = false,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         },

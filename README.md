@@ -1,27 +1,47 @@
-# Health Diary / Дневник здоровья
+# Дневник здоровья (Health Diary)
 
-Android app (Kotlin, Jetpack Compose, Room) for patients: log blood pressure, pulse, sugar,
-weight, temperature and oxygen by keyboard or voice, keep your own medicine list, and send a
-text report to the doctor through any messenger (Telegram, WhatsApp, MAX, email and so on).
+Приложение для Android (Kotlin, Jetpack Compose, Room). Подходит любому пациенту: можно вести
+дневник давления, пульса, сахара, веса, температуры и кислорода, вносить показания с клавиатуры
+или голосом, вести свой список лекарств и отправлять врачу текстовый отчёт через любой
+мессенджер (Telegram, WhatsApp, MAX, почта и др.).
 
-- Data is stored only on the phone (Room database). The app has no internet permission.
-- Languages: English and Russian (follows the phone). Light and dark theme follow the phone.
-- Voice: the Voice button opens the system speech recognizer. If the phone has none, use the
-  microphone on the keyboard to dictate into the quick-entry field, then press "Fill in".
-- The app only stores and sends records; it gives no medical advice.
+## Возможности
 
-## Build
+- **Таблица показаний.** Столбцы: дата (время мелким шрифтом под ней), утро/вечер, верхнее и
+  нижнее давление, пульс, принятые лекарства с дозировкой, заметка, изменить, удалить.
+  Единицы измерения только в шапке столбцов. Таблицу можно свайпать вправо и влево.
+  Тип измерения выбирается сверху.
+- **Голосовой ввод.** Значок микрофона справа в каждом поле ввода. В поле «Быстрый ввод»
+  можно продиктовать фразу целиком: «давление 135 на 80 пульс 72», поля заполнятся сами.
+- **Лекарства.** Пациент сам заполняет название, дозировку и время приёма. При внесении
+  показания отмечает, какие лекарства принял. В записи сохраняется название с дозировкой.
+- **Отправка врачу.** Отчёт за 7, 14, 30 дней или за всё время: лекарства, показания по датам,
+  среднее давление. Отправка через стандартное меню «Поделиться», есть копирование.
+- **Настройки.** Тема (как в системе, светлая, тёмная), язык (как в системе, русский,
+  английский), инструкция пользователя.
+- Данные хранятся только на телефоне, доступа в интернет у приложения нет.
+- Приложение не даёт медицинских советов.
 
-1. Android Studio: File > Open > select this folder, wait for Gradle sync.
-2. Run on a device or emulator (minSdk 24).
-3. Change `applicationId` and `namespace` in `app/build.gradle.kts` before publishing
-   (the package folders under `app/src/main/java/com/example/healthdiary` follow the namespace).
-4. Launcher icon: right-click `res` > New > Image Asset.
+## Как собрать
 
-## Structure
+1. Android Studio: File > Open, выберите папку проекта и дождитесь Gradle sync
+   (нужен интернет, Gradle 8.7 скачается сам).
+2. Запустите на телефоне или эмуляторе (minSdk 24, Android 7.0 и новее).
+3. Перед публикацией замените `applicationId` и `namespace` в `app/build.gradle.kts`
+   (сейчас `com.example.healthdiary`).
+4. Иконка приложения: правый клик на `res` > New > Image Asset.
 
-- `data/` Room entities, DAO, database
-- `voice/VoiceParser.kt` phrase to reading ("давление 135 на 80 пульс 72")
-- `report/ReportBuilder.kt` plain-text report for the doctor
-- `ui/` Compose screens: readings, medicines, send
-- `util/Format.kt` number formatting, units, input checks
+## Голосовой ввод
+
+Кнопка микрофона открывает системное распознавание речи. Если его на телефоне нет,
+используйте микрофон на клавиатуре. В числовых полях берётся первое число из сказанного,
+поэтому числа лучше называть цифрами.
+
+## Структура
+
+- `data/` — таблицы Room, DAO, база данных (версия 2, есть миграция с версии 1)
+- `voice/VoiceParser.kt` — разбор фразы в показание
+- `report/ReportBuilder.kt` — текст отчёта для врача
+- `ui/` — экраны Compose: показания (таблица и форма), лекарства, отправка, настройки
+- `util/` — форматы, проверка ввода, настройки темы и языка
+- `res/values/` — английские строки, `res/values-ru/` — русские

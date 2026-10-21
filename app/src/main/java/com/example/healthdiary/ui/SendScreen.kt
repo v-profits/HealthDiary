@@ -61,14 +61,13 @@ fun SendScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OutlinedTextField(
+        VoiceField(
             value = name,
-            onValueChange = {
+            onChange = {
                 name = it
                 onNameChange(it)
             },
-            label = { Text(stringResource(R.string.send_name)) },
-            singleLine = true,
+            label = stringResource(R.string.send_name),
             modifier = Modifier.fillMaxWidth()
         )
 

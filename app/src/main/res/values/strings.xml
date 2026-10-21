@@ -5,6 +5,7 @@
     <string name="tab_readings">Readings</string>
     <string name="tab_meds">Medicines</string>
     <string name="tab_send">To doctor</string>
+    <string name="tab_settings">Settings</string>
 
     <string name="type_pressure">Blood pressure</string>
     <string name="type_sugar">Blood sugar</string>
@@ -17,9 +18,20 @@
     <string name="unit_weight">kg</string>
     <string name="unit_temperature">°C</string>
     <string name="unit_spo2" formatted="false">%</string>
+    <string name="unit_bpm">bpm</string>
     <string name="pulse_value">pulse %1$d</string>
 
-    <string name="empty_readings">No entries yet. Tap + to add your first reading.</string>
+    <string name="col_date">Date</string>
+    <string name="col_part">AM / PM</string>
+    <string name="col_systolic">Upper</string>
+    <string name="col_diastolic">Lower</string>
+    <string name="col_pulse">Pulse</string>
+    <string name="col_meds">Medicine</string>
+    <string name="col_note">Note</string>
+    <string name="part_morning">Morning</string>
+    <string name="part_evening">Evening</string>
+
+    <string name="empty_readings">No entries of this type yet. Tap + to add a reading.</string>
     <string name="empty_meds">Your medicine list is empty. Tap + to add a medicine.</string>
 
     <string name="add_reading">New reading</string>
@@ -31,14 +43,15 @@
     <string name="field_diastolic">Lower (diastolic)</string>
     <string name="field_pulse">Pulse (optional)</string>
     <string name="field_note">Note (optional)</string>
+    <string name="field_meds">Medicines taken</string>
+    <string name="meds_pick_empty">Add your medicines on the Medicines tab, then you can tick them here.</string>
 
-    <string name="quick_hint">Say or type: pressure 135 over 80 pulse 72</string>
-    <string name="btn_mic">Voice</string>
-    <string name="btn_fill">Fill in</string>
-    <string name="voice_prompt">Say the reading, for example: pressure 135 over 80 pulse 72</string>
-    <string name="voice_unavailable">Voice input is not available on this phone. Tap the microphone on your keyboard and dictate into the field above.</string>
-    <string name="voice_not_understood">Could not understand the reading. Please enter the values by hand.</string>
-    <string name="heard">Heard: %1$s</string>
+    <string name="quick_label">Quick entry by phrase</string>
+    <string name="quick_placeholder">pressure 135 over 80 pulse 72</string>
+    <string name="quick_not_parsed">Phrase not understood. Enter the values in the fields below.</string>
+    <string name="btn_voice_desc">Voice input</string>
+    <string name="voice_unavailable">Voice input is not available on this phone. Use the microphone on your keyboard instead.</string>
+    <string name="voice_not_number">No number heard. Say the number in digits, for example: 135.</string>
     <string name="error_value">Please check the values you entered</string>
 
     <string name="btn_save">Save</string>
@@ -60,7 +73,7 @@
     <string name="btn_copy">Copy</string>
     <string name="copied">Copied</string>
     <string name="share_via">Send via</string>
-    <string name="disclaimer">The app only stores and sends your records. It gives no medical advice and does not replace a doctor. Data is kept on this phone.</string>
+    <string name="disclaimer">The app only stores and sends your records. It gives no medical advice and does not replace a doctor. Data is kept on this phone only.</string>
 
     <string name="report_title">Health diary: %1$s</string>
     <string name="report_title_noname">Health diary</string>
@@ -71,4 +84,29 @@
     <string name="report_none">no data</string>
     <string name="report_avg">Average: %1$s</string>
     <string name="report_footer">Entered by the patient in the Health Diary app. This is not a medical conclusion.</string>
+
+    <string name="settings_theme">Theme</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_language">Language</string>
+    <string name="lang_system">Follow system</string>
+    <string name="lang_ru">Русский</string>
+    <string name="lang_en">English</string>
+    <string name="settings_help">User guide</string>
+
+    <string name="help_1_title">What this app is for</string>
+    <string name="help_1_text">The diary keeps your measurements (blood pressure, pulse, sugar, weight, temperature, oxygen) and your list of medicines, then builds a report that you can send to your doctor in a messenger. The app gives no medical advice.</string>
+    <string name="help_2_title">First steps</string>
+    <string name="help_2_text">1. Open the Medicines tab and add your medicines: name, dose, when to take.\n2. Open the Readings tab and tap + to enter your first measurement.</string>
+    <string name="help_3_title">Adding a reading</string>
+    <string name="help_3_text">Choose the measurement type and the time of day (morning or evening). Type the values, or tap the microphone icon at the right of a field and say the number. You can also dictate a whole phrase into the quick entry field, for example: "pressure 135 over 80 pulse 72" — the fields fill in by themselves. Tick the medicines you have taken and tap Save.</string>
+    <string name="help_4_title">Voice input</string>
+    <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. Say numbers in digits, clearly and without pauses. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
+    <string name="help_5_title">The readings table</string>
+    <string name="help_5_text">The Readings tab shows entries as a table. Pick the measurement type at the top. If the table is wider than the screen, swipe it left or right. Units are shown in the column headers, the cells hold only values. The pencil edits an entry, the bin deletes it.</string>
+    <string name="help_6_title">Sending to the doctor</string>
+    <string name="help_6_text">On the To doctor tab enter your name, choose the period and tap Send to doctor. Pick a messenger (Telegram, WhatsApp, MAX, e-mail and so on) and then the doctor. The Copy button copies the report text.</string>
+    <string name="help_7_title">Settings and data</string>
+    <string name="help_7_text">Theme: follow system, light or dark. Language: follow system, Russian or English. All data is stored only on this phone and is lost if the app is deleted, so send the report to your doctor regularly.</string>
 </resources>

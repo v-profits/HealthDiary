@@ -6,6 +6,7 @@ import com.example.healthdiary.data.Medication
 import com.example.healthdiary.data.Reading
 import com.example.healthdiary.data.ReadingType
 import com.example.healthdiary.util.fmt
+import com.example.healthdiary.util.partLabelRes
 import com.example.healthdiary.util.typeLabelRes
 import com.example.healthdiary.util.valueText
 import java.text.SimpleDateFormat
@@ -67,8 +68,12 @@ object ReportBuilder {
             sb.appendLine()
             sb.appendLine(ctx.getString(typeLabelRes(type)) + ":")
             items.forEach { r ->
+                val part = ctx.getString(partLabelRes(r.dayPart)).lowercase()
+                val taken = if (r.meds.isBlank()) "" else " [${r.meds}]"
                 val note = if (r.note.isBlank()) "" else " (${r.note.trim()})"
-                sb.appendLine("${dateTimeFmt.format(Date(r.timestamp))} — ${valueText(ctx, r)}$note")
+                sb.appendLine(
+                    "${dateTimeFmt.format(Date(r.timestamp))}, $part — ${valueText(ctx, r)}$taken$note"
+                )
             }
             if (type == ReadingType.PRESSURE && items.size > 1) {
                 sb.appendLine(ctx.getString(R.string.report_avg, pressureAverage(items)))

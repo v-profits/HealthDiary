@@ -2,8 +2,11 @@ package com.example.healthdiary.util
 
 import android.content.Context
 import com.example.healthdiary.R
+import com.example.healthdiary.data.DayPart
+import com.example.healthdiary.data.Medication
 import com.example.healthdiary.data.Reading
 import com.example.healthdiary.data.ReadingType
+import java.util.Calendar
 import java.util.Locale
 
 /** 135.0 -> "135", 36.6 -> "36.6" (decimal separator follows the phone locale). */
@@ -12,6 +15,12 @@ fun fmt(v: Double): String =
 
 /** Accepts both "36,6" and "36.6". */
 fun toNum(s: String): Double? = s.trim().replace(',', '.').toDoubleOrNull()
+
+/** First number in a spoken phrase, as text. Used by the microphone in numeric fields. */
+fun firstNumber(s: String, integerOnly: Boolean): String? {
+    val re = if (integerOnly) Regex("""\d+""") else Regex("""\d+(?:[.,]\d+)?""")
+    return re.find(s)?.value
+}
 
 fun typeLabelRes(t: ReadingType): Int = when (t) {
     ReadingType.PRESSURE -> R.string.type_pressure
@@ -29,7 +38,14 @@ fun unitRes(t: ReadingType): Int = when (t) {
     ReadingType.SPO2 -> R.string.unit_spo2
 }
 
-/** "135/80 mmHg, pulse 72" or "5.4 mmol/L". */
+fun partLabelRes(p: DayPart): Int =
+    if (p == DayPart.MORNING) R.string.part_morning else R.string.part_evening
+
+/** Before 14:00 the reading is proposed as "morning", later as "evening". */
+fun defaultDayPart(): DayPart =
+    if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 14) DayPart.MORNING else DayPart.EVENING
+
+/** "135/80 mmHg, pulse 72" or "5.4 mmol/L". Used in the report for the doctor. */
 fun valueText(ctx: Context, r: Reading): String {
     val unit = ctx.getString(unitRes(r.type))
     if (r.type != ReadingType.PRESSURE) return "${fmt(r.v1)} $unit"
@@ -38,6 +54,15 @@ fun valueText(ctx: Context, r: Reading): String {
     val pulse = r.pulse ?: return base
     return base + ", " + ctx.getString(R.string.pulse_value, pulse)
 }
+
+const val MEDS_SEP = "; "
+
+/** "Perindopril 4 mg": the label of a medicine as it is stored in a reading. */
+fun medLabel(m: Medication): String =
+    listOf(m.name, m.dose).filter { it.isNotBlank() }.joinToString(" ")
+
+fun splitMeds(s: String): List<String> =
+    s.split(";").map { it.trim() }.filter { it.isNotEmpty() }
 
 /** Sanity ranges that catch typos (for example 1350 instead of 135). */
 object Validation {
