@@ -173,14 +173,14 @@ fun ReadingForm(
                         value = v1,
                         onChange = { v1 = it },
                         label = stringResource(R.string.field_systolic),
-                        kind = FieldKind.DECIMAL,
+                        kind = FieldKind.INTEGER,
                         modifier = Modifier.weight(1f)
                     )
                     VoiceField(
                         value = v2,
                         onChange = { v2 = it },
                         label = stringResource(R.string.field_diastolic),
-                        kind = FieldKind.DECIMAL,
+                        kind = FieldKind.INTEGER,
                         modifier = Modifier.weight(1f)
                     )
                 }

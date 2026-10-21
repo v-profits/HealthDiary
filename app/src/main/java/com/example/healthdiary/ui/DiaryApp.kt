@@ -76,7 +76,8 @@ fun DiaryApp(vm: DiaryViewModel) {
                         onTypeChange = { listType = it },
                         onAdd = { formId = 0L },
                         onEdit = { formId = it.id },
-                        onDelete = vm::deleteReading
+                        onDelete = vm::deleteReading,
+                        onClear = vm::clearReadings
                     )
                     1 -> MedsScreen(
                         meds = meds,

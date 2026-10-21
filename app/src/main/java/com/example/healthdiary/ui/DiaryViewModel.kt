@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.healthdiary.data.AppDb
 import com.example.healthdiary.data.Medication
 import com.example.healthdiary.data.Reading
+import com.example.healthdiary.data.ReadingType
 import com.example.healthdiary.util.AppPrefs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,6 +55,10 @@ class DiaryViewModel(app: Application) : AndroidViewModel(app) {
 
     fun deleteReading(r: Reading) {
         viewModelScope.launch { dao.deleteReading(r) }
+    }
+
+    fun clearReadings(type: ReadingType) {
+        viewModelScope.launch { dao.deleteReadingsOfType(type) }
     }
 
     fun saveMedication(m: Medication) {

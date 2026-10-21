@@ -51,6 +51,26 @@ class VoiceParserTest {
     }
 
     @Test
+    fun sugarSaidInWords() {
+        val a = VoiceParser.parse("сахар пять запятая пять")
+        assertNotNull(a)
+        assertEquals(ReadingType.SUGAR, a!!.type)
+        assertEquals(5.5, a.v1!!, 0.0)
+        val b = VoiceParser.parse("сахар 5 и 5")
+        assertNotNull(b)
+        assertEquals(5.5, b!!.v1!!, 0.0)
+    }
+
+    @Test
+    fun pressureSaidInWords() {
+        val p = VoiceParser.parse("давление сто тридцать пять на восемьдесят пульс семьдесят два")
+        assertNotNull(p)
+        assertEquals(135.0, p!!.v1!!, 0.0)
+        assertEquals(80.0, p.v2!!, 0.0)
+        assertEquals(72, p.pulse)
+    }
+
+    @Test
     fun noNumbers() {
         assertNull(VoiceParser.parse("давление нормальное"))
     }

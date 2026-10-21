@@ -24,6 +24,10 @@ interface DiaryDao {
     @Delete
     suspend fun deleteReading(reading: Reading)
 
+    /** Removes every entry of one measurement type in a single query. */
+    @Query("DELETE FROM readings WHERE type = :type")
+    suspend fun deleteReadingsOfType(type: ReadingType)
+
     @Query("SELECT * FROM medications ORDER BY name COLLATE NOCASE")
     fun medications(): Flow<List<Medication>>
 

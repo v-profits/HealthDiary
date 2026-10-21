@@ -6,17 +6,21 @@ import android.content.ContextWrapper
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.healthdiary.R
 
@@ -69,17 +73,15 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.titleMedium)
-        listOf(
-            0 to R.string.theme_system,
-            1 to R.string.theme_light,
-            2 to R.string.theme_dark
-        ).forEach { (value, label) ->
-            RadioRow(
-                selected = themeMode == value,
-                label = stringResource(label),
-                onClick = { onThemeChange(value) }
-            )
-        }
+        ChoiceButtons(
+            options = listOf(
+                0 to stringResource(R.string.theme_system),
+                1 to stringResource(R.string.theme_light),
+                2 to stringResource(R.string.theme_dark)
+            ),
+            selected = themeMode,
+            onSelect = onThemeChange
+        )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
@@ -87,23 +89,21 @@ fun SettingsScreen(
             stringResource(R.string.settings_language),
             style = MaterialTheme.typography.titleMedium
         )
-        listOf(
-            "" to R.string.lang_system,
-            "ru" to R.string.lang_ru,
-            "en" to R.string.lang_en
-        ).forEach { (value, label) ->
-            RadioRow(
-                selected = language == value,
-                label = stringResource(label),
-                onClick = {
-                    if (language != value) {
-                        onLanguageChange(value)
-                        // The language is applied when the screen is created again.
-                        ctx.findActivity()?.recreate()
-                    }
+        ChoiceButtons(
+            options = listOf(
+                "" to stringResource(R.string.lang_system),
+                "ru" to stringResource(R.string.lang_ru),
+                "en" to stringResource(R.string.lang_en)
+            ),
+            selected = language,
+            onSelect = { value ->
+                if (value != language) {
+                    onLanguageChange(value)
+                    // The language is applied when the screen is created again.
+                    ctx.findActivity()?.recreate()
                 }
-            )
-        }
+            }
+        )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
@@ -147,16 +147,41 @@ fun SettingsScreen(
     }
 }
 
+/** A row of equal buttons; the chosen one is filled, the others only have an outline. */
 @Composable
-private fun RadioRow(selected: Boolean, label: String, onClick: () -> Unit) {
+private fun <T> ChoiceButtons(
+    options: List<Pair<T, String>>,
+    selected: T,
+    onSelect: (T) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(IntrinsicSize.Min),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        RadioButton(selected = selected, onClick = null)
-        Text(label, modifier = Modifier.padding(start = 12.dp))
+        options.forEach { (value, label) ->
+            val buttonModifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+            val padding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+            if (value == selected) {
+                Button(
+                    onClick = { onSelect(value) },
+                    modifier = buttonModifier,
+                    contentPadding = padding
+                ) {
+                    Text(label, textAlign = TextAlign.Center)
+                }
+            } else {
+                OutlinedButton(
+                    onClick = { onSelect(value) },
+                    modifier = buttonModifier,
+                    contentPadding = padding
+                ) {
+                    Text(label, textAlign = TextAlign.Center)
+                }
+            }
+        }
     }
 }

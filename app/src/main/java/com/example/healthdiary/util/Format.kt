@@ -6,6 +6,7 @@ import com.example.healthdiary.data.DayPart
 import com.example.healthdiary.data.Medication
 import com.example.healthdiary.data.Reading
 import com.example.healthdiary.data.ReadingType
+import com.example.healthdiary.voice.SpokenNumber
 import java.util.Calendar
 import java.util.Locale
 
@@ -18,8 +19,10 @@ fun toNum(s: String): Double? = s.trim().replace(',', '.').toDoubleOrNull()
 
 /** First number in a spoken phrase, as text. Used by the microphone in numeric fields. */
 fun firstNumber(s: String, integerOnly: Boolean): String? {
+    // Words become digits first: "пять запятая пять" -> "5.5", "сто тридцать пять" -> "135".
+    val text = SpokenNumber.normalize(s, andIsDecimal = !integerOnly)
     val re = if (integerOnly) Regex("""\d+""") else Regex("""\d+(?:[.,]\d+)?""")
-    return re.find(s)?.value
+    return re.find(text)?.value
 }
 
 fun typeLabelRes(t: ReadingType): Int = when (t) {

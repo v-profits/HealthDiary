@@ -58,6 +58,8 @@
     <string name="btn_cancel">Cancel</string>
     <string name="btn_delete">Delete</string>
     <string name="delete_confirm">Delete this entry?</string>
+    <string name="btn_clear">Clear</string>
+    <string name="clear_confirm">Delete all %2$d entries of type %1$s? This cannot be undone.</string>
 
     <string name="med_name">Name</string>
     <string name="med_dose">Dose (for example, 4 mg)</string>
@@ -86,11 +88,11 @@
     <string name="report_footer">Entered by the patient in the Health Diary app. This is not a medical conclusion.</string>
 
     <string name="settings_theme">Theme</string>
-    <string name="theme_system">Follow system</string>
+    <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="settings_language">Language</string>
-    <string name="lang_system">Follow system</string>
+    <string name="lang_system">System</string>
     <string name="lang_ru">Русский</string>
     <string name="lang_en">English</string>
     <string name="settings_help">User guide</string>
@@ -102,11 +104,11 @@
     <string name="help_3_title">Adding a reading</string>
     <string name="help_3_text">Choose the measurement type and the time of day (morning or evening). Type the values, or tap the microphone icon at the right of a field and say the number. You can also dictate a whole phrase into the quick entry field, for example: "pressure 135 over 80 pulse 72" — the fields fill in by themselves. Tick the medicines you have taken and tap Save.</string>
     <string name="help_4_title">Voice input</string>
-    <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. Say numbers in digits, clearly and without pauses. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
+    <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. Say numbers in digits or in words. For decimals (sugar, weight, temperature) say five point five, five comma five or 5 and 5, and you get 5.5. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
     <string name="help_5_title">The readings table</string>
-    <string name="help_5_text">The Readings tab shows entries as a table. Pick the measurement type at the top. If the table is wider than the screen, swipe it left or right. Units are shown in the column headers, the cells hold only values. The pencil edits an entry, the bin deletes it.</string>
+    <string name="help_5_text">The Readings tab shows entries as a table. Pick the measurement type at the top. If the table is wider than the screen, swipe it left or right. Units are shown in the column headers, the cells hold only values. The pencil edits an entry, the bin deletes it. The Clear button under the table deletes all entries of the chosen type at once, after you confirm.</string>
     <string name="help_6_title">Sending to the doctor</string>
     <string name="help_6_text">On the To doctor tab enter your name, choose the period and tap Send to doctor. Pick a messenger (Telegram, WhatsApp, MAX, e-mail and so on) and then the doctor. The Copy button copies the report text.</string>
     <string name="help_7_title">Settings and data</string>
-    <string name="help_7_text">Theme: follow system, light or dark. Language: follow system, Russian or English. All data is stored only on this phone and is lost if the app is deleted, so send the report to your doctor regularly.</string>
+    <string name="help_7_text">Theme: system, light or dark. Language: system, Russian or English. All data is stored only on this phone and is lost if the app is deleted, so send the report to your doctor regularly.</string>
 </resources>

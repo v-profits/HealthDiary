@@ -11,8 +11,8 @@ data class ParsedReading(
 
 /**
  * Turns a dictated or typed phrase into a reading, for example:
- *  "давление 135 на 80 пульс 72", "сахар 5,4", "вес 84", "pressure 135 over 80".
- * Speech recognizers usually write numbers as digits; spelled-out numbers are not handled.
+ *  "давление 135 на 80 пульс 72", "сахар пять запятая пять", "вес 84", "pressure 135 over 80".
+ * Numbers may be digits or words (see [SpokenNumber]).
  */
 object VoiceParser {
     private val number = Regex("""\d+(?:[.,]\d+)?""")
@@ -20,8 +20,23 @@ object VoiceParser {
 
     private fun hasAny(text: String, vararg keys: String) = keys.any { text.contains(it) }
 
+    /** The measurement named in the phrase, or null when no keyword is said. */
+    private fun keywordType(t: String): ReadingType? = when {
+        hasAny(t, "давлен", "тонометр", "pressure") -> ReadingType.PRESSURE
+        hasAny(t, "сахар", "глюкоз", "sugar", "glucose") -> ReadingType.SUGAR
+        hasAny(t, "темпер", "temperature") -> ReadingType.TEMPERATURE
+        hasAny(t, "сатурац", "кислород", "spo", "oxygen", "saturation") -> ReadingType.SPO2
+        hasAny(t, "вес", "weight") -> ReadingType.WEIGHT
+        else -> null
+    }
+
     fun parse(raw: String): ParsedReading? {
-        var t = raw.lowercase()
+        var t = SpokenNumber.normalize(raw, andIsDecimal = false)
+        val keyType = keywordType(t)
+        if (keyType != null && keyType != ReadingType.PRESSURE) {
+            // sugar, weight, temperature: "5 и 5" means 5.5
+            t = SpokenNumber.normalize(raw, andIsDecimal = true)
+        }
 
         var pulse: Int? = null
         val m = pulseRe.find(t)
@@ -33,16 +48,12 @@ object VoiceParser {
         val nums = number.findAll(t).map { it.value.replace(',', '.').toDouble() }.toList()
         if (nums.isEmpty()) return null
 
-        val type: ReadingType = when {
-            hasAny(t, "давлен", "тонометр", "pressure") -> ReadingType.PRESSURE
-            hasAny(t, "сахар", "глюкоз", "sugar", "glucose") -> ReadingType.SUGAR
-            hasAny(t, "темпер", "temperature") -> ReadingType.TEMPERATURE
-            hasAny(t, "сатурац", "кислород", "spo", "oxygen", "saturation") -> ReadingType.SPO2
-            hasAny(t, "вес", "weight") -> ReadingType.WEIGHT
-            nums.size >= 2 && nums[0] in 70.0..260.0 && nums[1] in 30.0..160.0 && nums[0] > nums[1] ->
+        val type: ReadingType = keyType
+            ?: (if (nums.size >= 2 && nums[0] in 70.0..260.0 && nums[1] in 30.0..160.0 && nums[0] > nums[1]) {
                 ReadingType.PRESSURE
-            else -> return null
-        }
+            } else {
+                return null
+            })
 
         return if (type == ReadingType.PRESSURE) {
             if (nums.size < 2) null

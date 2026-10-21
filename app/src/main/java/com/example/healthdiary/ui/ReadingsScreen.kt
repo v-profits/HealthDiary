@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,7 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -65,10 +68,12 @@ fun ReadingsScreen(
     onTypeChange: (ReadingType) -> Unit,
     onAdd: () -> Unit,
     onEdit: (Reading) -> Unit,
-    onDelete: (Reading) -> Unit
+    onDelete: (Reading) -> Unit,
+    onClear: (ReadingType) -> Unit
 ) {
     val shown = remember(readings, type) { readings.filter { it.type == type } }
     var toDelete by remember { mutableStateOf<Reading?>(null) }
+    var askClear by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -96,6 +101,24 @@ fun ReadingsScreen(
                     onDelete = { toDelete = it },
                     modifier = Modifier.weight(1f)
                 )
+                // Under the table: removes all entries of the shown type at once.
+                // The height leaves room for the "+" button on the right.
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 88.dp)
+                        .padding(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedButton(
+                        onClick = { askClear = true },
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Text(stringResource(R.string.btn_clear))
+                    }
+                }
             }
         }
 
@@ -117,6 +140,21 @@ fun ReadingsScreen(
                 toDelete = null
             },
             onDismiss = { toDelete = null }
+        )
+    }
+
+    if (askClear) {
+        ConfirmDialog(
+            text = stringResource(
+                R.string.clear_confirm,
+                stringResource(typeLabelRes(type)),
+                shown.size
+            ),
+            onConfirm = {
+                onClear(type)
+                askClear = false
+            },
+            onDismiss = { askClear = false }
         )
     }
 }
@@ -175,7 +213,7 @@ private fun ReadingsTable(
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(bottom = 88.dp)
+                contentPadding = PaddingValues(bottom = 8.dp)
             ) {
                 items(items, key = { it.id }) { r ->
                     Row(
