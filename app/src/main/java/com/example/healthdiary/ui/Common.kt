@@ -106,8 +106,7 @@ enum class FieldKind { TEXT, DECIMAL, INTEGER }
 /**
  * Text field with a microphone icon on the right. The icon opens the system speech recognizer;
  * the result goes into the field. In numeric fields only the first number of the phrase is kept.
- * [appendVoice]: in text fields the spoken text is added after the existing text (true)
- * or replaces it (false).
+ * A new voice input always replaces what was in the field.
  */
 @Composable
 fun VoiceField(
@@ -117,7 +116,6 @@ fun VoiceField(
     modifier: Modifier = Modifier,
     kind: FieldKind = FieldKind.TEXT,
     singleLine: Boolean = true,
-    appendVoice: Boolean = true,
     capitalizeFirst: Boolean = false,
     placeholder: String? = null
 ) {
@@ -135,10 +133,7 @@ fun VoiceField(
                     // capitalizeFirst: a spoken medicine name starts with a capital letter
                     val spoken =
                         if (capitalizeFirst) heard.replaceFirstChar { it.uppercaseChar() } else heard
-                    onChange(
-                        if (appendVoice && value.isNotBlank()) value.trimEnd() + " " + heard
-                        else spoken
-                    )
+                    onChange(spoken)
                 } else {
                     val number = firstNumber(heard, kind == FieldKind.INTEGER)
                     if (number != null) {

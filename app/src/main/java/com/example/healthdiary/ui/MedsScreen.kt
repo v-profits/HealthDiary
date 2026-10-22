@@ -77,10 +77,13 @@ fun MedsScreen(
                         .padding(start = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Half of the screen wide, so it stays clear of the "+" button on the right.
                     ChipButton(
                         text = stringResource(R.string.btn_clear),
                         onClick = { askClear = true },
-                        danger = true
+                        modifier = Modifier.fillMaxWidth(0.5f),
+                        danger = true,
+                        stretch = true
                     )
                 }
             }

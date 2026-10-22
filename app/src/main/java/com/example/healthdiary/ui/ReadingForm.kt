@@ -161,7 +161,6 @@ fun ReadingForm(
                 onChange = { onQuick(it) },
                 label = stringResource(R.string.quick_label),
                 placeholder = stringResource(R.string.quick_placeholder),
-                appendVoice = false,
                 modifier = Modifier.fillMaxWidth()
             )
             if (quickFailed) {

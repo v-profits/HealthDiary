@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Icons of the bottom tabs. Each one is any emoji or short text: replace it as you like.
+        The same icons are used in all languages.
+    -->
+    <string name="tab_icon_readings" translatable="false">📋</string>
+    <string name="tab_icon_meds" translatable="false">💊</string>
+    <string name="tab_icon_send" translatable="false">📤</string>
+    <string name="tab_icon_settings" translatable="false">⚙️</string>
+</resources>

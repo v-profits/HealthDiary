@@ -72,11 +72,12 @@ fun DiaryApp(vm: DiaryViewModel) {
         return
     }
 
+    // Tab icons are text resources: change them in res/values/tab_icons.xml.
     val tabs = listOf(
-        "📋" to R.string.tab_readings,
-        "💊" to R.string.tab_meds,
-        "📤" to R.string.tab_send,
-        "⚙️" to R.string.tab_settings
+        R.string.tab_icon_readings to R.string.tab_readings,
+        R.string.tab_icon_meds to R.string.tab_meds,
+        R.string.tab_icon_send to R.string.tab_send,
+        R.string.tab_icon_settings to R.string.tab_settings
     )
 
     // The line under the app name tells what the current tab holds.
@@ -156,7 +157,7 @@ fun DiaryApp(vm: DiaryViewModel) {
                     NavigationBarItem(
                         selected = tab == index,
                         onClick = { tab = index },
-                        icon = { Text(icon) },
+                        icon = { Text(stringResource(icon)) },
                         label = { Text(stringResource(label)) }
                     )
                 }
