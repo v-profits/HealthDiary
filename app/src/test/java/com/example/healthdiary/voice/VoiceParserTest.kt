@@ -71,6 +71,23 @@ class VoiceParserTest {
     }
 
     @Test
+    fun chosenTypeIsUsedWhenPhraseHasNoKeyword() {
+        val a = VoiceParser.parse("четыре запятая два", ReadingType.SUGAR)
+        assertNotNull(a)
+        assertEquals(ReadingType.SUGAR, a!!.type)
+        assertEquals(4.2, a.v1!!, 0.0)
+
+        val b = VoiceParser.parse("шесть точка семь", ReadingType.SUGAR)
+        assertEquals(6.7, b!!.v1!!, 0.0)
+
+        val c = VoiceParser.parse("три и один", ReadingType.WEIGHT)
+        assertEquals(ReadingType.WEIGHT, c!!.type)
+        assertEquals(3.1, c.v1!!, 0.0)
+
+        assertNull(VoiceParser.parse("четыре запятая два"))
+    }
+
+    @Test
     fun noNumbers() {
         assertNull(VoiceParser.parse("давление нормальное"))
     }

@@ -68,4 +68,9 @@ class DiaryViewModel(app: Application) : AndroidViewModel(app) {
     fun deleteMedication(m: Medication) {
         viewModelScope.launch { dao.deleteMedication(m) }
     }
+
+    /** Readings keep their own text of the medicines taken, so history is not affected. */
+    fun clearMedications() {
+        viewModelScope.launch { dao.deleteAllMedications() }
+    }
 }

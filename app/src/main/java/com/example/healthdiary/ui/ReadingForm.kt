@@ -69,7 +69,7 @@ fun ReadingForm(
     // Typing or dictating a whole phrase fills the fields below as soon as it is understood.
     fun onQuick(text: String) {
         quick = text
-        val p = VoiceParser.parse(text) ?: return
+        val p = VoiceParser.parse(text, type) ?: return
         type = p.type
         v1 = p.v1?.let { fmt(it) } ?: ""
         v2 = p.v2?.let { fmt(it) } ?: ""
@@ -77,7 +77,7 @@ fun ReadingForm(
         showError = false
     }
 
-    val quickFailed = quick.isNotBlank() && VoiceParser.parse(quick) == null
+    val quickFailed = quick.isNotBlank() && VoiceParser.parse(quick, type) == null
 
     fun save() {
         val a = toNum(v1)
@@ -249,12 +249,17 @@ fun ReadingForm(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = onCancel, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.btn_cancel))
-                }
-                Button(onClick = { save() }, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.btn_save))
-                }
+                ChipButton(
+                    text = stringResource(R.string.btn_cancel),
+                    onClick = onCancel,
+                    modifier = Modifier.weight(1f)
+                )
+                ChipButton(
+                    text = stringResource(R.string.btn_save),
+                    onClick = { save() },
+                    modifier = Modifier.weight(1f),
+                    selected = true
+                )
             }
         }
     }

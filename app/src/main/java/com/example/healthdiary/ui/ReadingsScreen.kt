@@ -110,14 +110,11 @@ fun ReadingsScreen(
                         .padding(start = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedButton(
+                    ChipButton(
+                        text = stringResource(R.string.btn_clear),
                         onClick = { askClear = true },
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Text(stringResource(R.string.btn_clear))
-                    }
+                        danger = true
+                    )
                 }
             }
         }
@@ -273,7 +270,7 @@ private fun ReadingsTable(
 }
 
 @Composable
-private fun HeaderCell(title: String, unit: String?, width: Dp) {
+internal fun HeaderCell(title: String, unit: String?, width: Dp) {
     Column(
         modifier = Modifier
             .width(width)

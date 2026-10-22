@@ -36,6 +36,9 @@ interface DiaryDao {
 
     @Delete
     suspend fun deleteMedication(medication: Medication)
+
+    @Query("DELETE FROM medications")
+    suspend fun deleteAllMedications()
 }
 
 /** v1 -> v2: morning/evening and the medicines taken were added to every reading. */

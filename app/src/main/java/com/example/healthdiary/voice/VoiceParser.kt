@@ -30,10 +30,15 @@ object VoiceParser {
         else -> null
     }
 
-    fun parse(raw: String): ParsedReading? {
+    /**
+     * [defaultType] is the measurement already chosen on the screen. When the phrase does not
+     * name a measurement, it is used, so "четыре запятая два" is enough for sugar.
+     */
+    fun parse(raw: String, defaultType: ReadingType? = null): ParsedReading? {
         var t = SpokenNumber.normalize(raw, andIsDecimal = false)
         val keyType = keywordType(t)
-        if (keyType != null && keyType != ReadingType.PRESSURE) {
+        val decimalType = keyType ?: defaultType
+        if (decimalType != null && decimalType != ReadingType.PRESSURE) {
             // sugar, weight, temperature: "5 и 5" means 5.5
             t = SpokenNumber.normalize(raw, andIsDecimal = true)
         }
@@ -48,12 +53,12 @@ object VoiceParser {
         val nums = number.findAll(t).map { it.value.replace(',', '.').toDouble() }.toList()
         if (nums.isEmpty()) return null
 
-        val type: ReadingType = keyType
-            ?: (if (nums.size >= 2 && nums[0] in 70.0..260.0 && nums[1] in 30.0..160.0 && nums[0] > nums[1]) {
+        val type: ReadingType = keyType ?: when {
+            nums.size >= 2 && nums[0] in 70.0..260.0 && nums[1] in 30.0..160.0 && nums[0] > nums[1] ->
                 ReadingType.PRESSURE
-            } else {
-                return null
-            })
+            defaultType != null && defaultType != ReadingType.PRESSURE -> defaultType
+            else -> return null
+        }
 
         return if (type == ReadingType.PRESSURE) {
             if (nums.size < 2) null

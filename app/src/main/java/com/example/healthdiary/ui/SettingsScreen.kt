@@ -6,21 +6,15 @@ import android.content.ContextWrapper
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.healthdiary.R
 
@@ -52,8 +45,28 @@ private val helpSections = listOf(
     R.string.help_4_title to R.string.help_4_text,
     R.string.help_5_title to R.string.help_5_text,
     R.string.help_6_title to R.string.help_6_text,
-    R.string.help_7_title to R.string.help_7_text
+    R.string.help_7_title to R.string.help_7_text,
+    R.string.help_8_title to R.string.help_8_text
 )
+
+/** The user guide text. Shown in Settings and in a dialog opened from the top menu. */
+@Composable
+fun HelpSections() {
+    Column {
+        helpSections.forEach { (title, text) ->
+            Text(
+                stringResource(title),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+            Text(
+                stringResource(text),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+}
 
 @Composable
 fun SettingsScreen(
@@ -122,20 +135,7 @@ fun SettingsScreen(
                     )
                     Text(if (helpOpen) "▲" else "▼")
                 }
-                if (helpOpen) {
-                    helpSections.forEach { (title, text) ->
-                        Text(
-                            stringResource(title),
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier.padding(top = 16.dp)
-                        )
-                        Text(
-                            stringResource(text),
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-                }
+                if (helpOpen) HelpSections()
             }
         }
 
@@ -147,7 +147,7 @@ fun SettingsScreen(
     }
 }
 
-/** A row of equal buttons; the chosen one is filled, the others only have an outline. */
+/** A row of equal chip buttons, the same look as "Morning / Evening"; the chosen one is filled. */
 @Composable
 private fun <T> ChoiceButtons(
     options: List<Pair<T, String>>,
@@ -155,33 +155,16 @@ private fun <T> ChoiceButtons(
     onSelect: (T) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         options.forEach { (value, label) ->
-            val buttonModifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-            val padding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
-            if (value == selected) {
-                Button(
-                    onClick = { onSelect(value) },
-                    modifier = buttonModifier,
-                    contentPadding = padding
-                ) {
-                    Text(label, textAlign = TextAlign.Center)
-                }
-            } else {
-                OutlinedButton(
-                    onClick = { onSelect(value) },
-                    modifier = buttonModifier,
-                    contentPadding = padding
-                ) {
-                    Text(label, textAlign = TextAlign.Center)
-                }
-            }
+            ChipButton(
+                text = label,
+                onClick = { onSelect(value) },
+                modifier = Modifier.weight(1f),
+                selected = value == selected
+            )
         }
     }
 }

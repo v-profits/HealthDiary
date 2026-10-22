@@ -104,19 +104,17 @@ fun SendScreen(
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(
+            ChipButton(
+                text = stringResource(R.string.btn_share),
                 onClick = { shareReport(ctx, report) },
+                modifier = Modifier.weight(1f),
+                selected = true
+            )
+            ChipButton(
+                text = stringResource(R.string.btn_copy),
+                onClick = { copyReport(ctx, report) },
                 modifier = Modifier.weight(1f)
-            ) {
-                Icon(Icons.Default.Share, contentDescription = null)
-                Text(
-                    text = stringResource(R.string.btn_share),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-            OutlinedButton(onClick = { copyReport(ctx, report) }) {
-                Text(stringResource(R.string.btn_copy))
-            }
+            )
         }
 
         Text(

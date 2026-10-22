@@ -1,28 +1,31 @@
 package com.example.healthdiary.ui
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,59 +34,53 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.healthdiary.R
 import com.example.healthdiary.data.Medication
+
+// Column widths of the medicine table. It is swiped sideways when it is wider than the screen.
+private val WName = 160.dp
+private val WDose = 110.dp
+private val WWhen = 150.dp
+private val WNote = 170.dp
+private val WAct = 48.dp
 
 @Composable
 fun MedsScreen(
     meds: List<Medication>,
     onSave: (Medication) -> Unit,
-    onDelete: (Medication) -> Unit
+    onDelete: (Medication) -> Unit,
+    onClear: () -> Unit
 ) {
     var editing by remember { mutableStateOf<Medication?>(null) }
     var toDelete by remember { mutableStateOf<Medication?>(null) }
+    var askClear by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (meds.isEmpty()) {
-            EmptyHint(stringResource(R.string.empty_meds))
-        } else {
-            LazyColumn(
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(meds, key = { it.id }) { m ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(m.name, style = MaterialTheme.typography.titleMedium)
-                                val details = listOf(m.dose, m.schedule)
-                                    .filter { it.isNotBlank() }
-                                    .joinToString(" · ")
-                                if (details.isNotEmpty()) {
-                                    Text(details, style = MaterialTheme.typography.bodyMedium)
-                                }
-                                if (m.note.isNotBlank()) {
-                                    Text(m.note, style = MaterialTheme.typography.bodySmall)
-                                }
-                            }
-                            IconButton(onClick = { editing = m }) {
-                                Icon(
-                                    Icons.Default.Edit,
-                                    contentDescription = stringResource(R.string.edit_med)
-                                )
-                            }
-                            IconButton(onClick = { toDelete = m }) {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.btn_delete)
-                                )
-                            }
-                        }
-                    }
+        Column(modifier = Modifier.fillMaxSize()) {
+            if (meds.isEmpty()) {
+                EmptyHint(stringResource(R.string.empty_meds))
+            } else {
+                MedsTable(
+                    items = meds,
+                    onEdit = { editing = it },
+                    onDelete = { toDelete = it },
+                    modifier = Modifier.weight(1f)
+                )
+                // Under the table; the height leaves room for the "+" button on the right.
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 88.dp)
+                        .padding(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ChipButton(
+                        text = stringResource(R.string.btn_clear),
+                        onClick = { askClear = true },
+                        danger = true
+                    )
                 }
             }
         }
@@ -118,6 +115,89 @@ fun MedsScreen(
             },
             onDismiss = { toDelete = null }
         )
+    }
+
+    if (askClear) {
+        ConfirmDialog(
+            text = stringResource(R.string.clear_meds_confirm, meds.size),
+            onConfirm = {
+                onClear()
+                askClear = false
+            },
+            onDismiss = { askClear = false }
+        )
+    }
+}
+
+@Composable
+private fun MedsTable(
+    items: List<Medication>,
+    onEdit: (Medication) -> Unit,
+    onDelete: (Medication) -> Unit,
+    modifier: Modifier
+) {
+    val total = WName + WDose + WWhen + WNote + WAct * 2
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .horizontalScroll(rememberScrollState())
+    ) {
+        Column(modifier = Modifier.width(total)) {
+            Row(
+                modifier = Modifier
+                    .width(total)
+                    .padding(vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HeaderCell(stringResource(R.string.col_med_name), null, WName)
+                HeaderCell(stringResource(R.string.col_med_dose), null, WDose)
+                HeaderCell(stringResource(R.string.col_med_schedule), null, WWhen)
+                HeaderCell(stringResource(R.string.col_note), null, WNote)
+                Spacer(modifier = Modifier.width(WAct * 2))
+            }
+            HorizontalDivider()
+
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(bottom = 8.dp)
+            ) {
+                items(items, key = { it.id }) { m ->
+                    Row(
+                        modifier = Modifier
+                            .width(total)
+                            .heightIn(min = 56.dp)
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextCell(m.name, WName, MaterialTheme.typography.titleSmall)
+                        TextCell(m.dose, WDose, MaterialTheme.typography.bodyMedium)
+                        TextCell(m.schedule, WWhen, MaterialTheme.typography.bodyMedium)
+                        TextCell(m.note, WNote, MaterialTheme.typography.bodySmall)
+                        IconButton(onClick = { onEdit(m) }, modifier = Modifier.width(WAct)) {
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = stringResource(R.string.edit_med)
+                            )
+                        }
+                        IconButton(onClick = { onDelete(m) }, modifier = Modifier.width(WAct)) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.btn_delete)
+                            )
+                        }
+                    }
+                    HorizontalDivider()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TextCell(text: String, width: Dp, style: androidx.compose.ui.text.TextStyle) {
+    Box(modifier = Modifier.width(width).padding(horizontal = 8.dp)) {
+        Text(text, style = style)
     }
 }
 
@@ -163,8 +243,10 @@ private fun MedDialog(initial: Medication, onSave: (Medication) -> Unit, onDismi
             }
         },
         confirmButton = {
-            TextButton(
+            ChipButton(
+                text = stringResource(R.string.btn_save),
                 enabled = name.isNotBlank(),
+                selected = true,
                 onClick = {
                     onSave(
                         initial.copy(
@@ -175,10 +257,10 @@ private fun MedDialog(initial: Medication, onSave: (Medication) -> Unit, onDismi
                         )
                     )
                 }
-            ) { Text(stringResource(R.string.btn_save)) }
+            )
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_cancel)) }
+            ChipButton(text = stringResource(R.string.btn_cancel), onClick = onDismiss)
         }
     )
 }

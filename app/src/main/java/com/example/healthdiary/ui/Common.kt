@@ -9,11 +9,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,10 +41,43 @@ fun ConfirmDialog(text: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         text = { Text(text) },
         confirmButton = {
-            TextButton(onClick = onConfirm) { Text(stringResource(R.string.btn_delete)) }
+            ChipButton(
+                text = stringResource(R.string.btn_delete),
+                onClick = onConfirm,
+                danger = true
+            )
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_cancel)) }
+            ChipButton(text = stringResource(R.string.btn_cancel), onClick = onDismiss)
+        }
+    )
+}
+
+/**
+ * One look for every button of the app: the same chip as "Morning / Evening".
+ * [selected] fills it (main action or chosen option), [danger] makes the text red.
+ */
+@Composable
+fun ChipButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    selected: Boolean = false,
+    danger: Boolean = false,
+    enabled: Boolean = true
+) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        enabled = enabled,
+        label = {
+            Text(text, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+        },
+        modifier = modifier.heightIn(min = 40.dp),
+        colors = if (danger) {
+            FilterChipDefaults.filterChipColors(labelColor = MaterialTheme.colorScheme.error)
+        } else {
+            FilterChipDefaults.filterChipColors()
         }
     )
 }
