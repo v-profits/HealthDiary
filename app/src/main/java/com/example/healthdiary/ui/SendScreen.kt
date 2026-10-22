@@ -108,12 +108,14 @@ fun SendScreen(
                 text = stringResource(R.string.btn_share),
                 onClick = { shareReport(ctx, report) },
                 modifier = Modifier.weight(1f),
-                selected = true
+                selected = true,
+                stretch = true
             )
             ChipButton(
                 text = stringResource(R.string.btn_copy),
                 onClick = { copyReport(ctx, report) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                stretch = true
             )
         }
 

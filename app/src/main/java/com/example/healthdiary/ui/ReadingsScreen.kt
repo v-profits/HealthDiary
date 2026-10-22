@@ -281,13 +281,14 @@ internal fun HeaderCell(title: String, unit: String?, width: Dp) {
             title,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center
         )
         if (unit != null) {
             Text(
                 unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
         }

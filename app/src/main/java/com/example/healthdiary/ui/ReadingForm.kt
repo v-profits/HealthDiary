@@ -142,7 +142,11 @@ fun ReadingForm(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Morning / noon / evening / night; wraps to a second line on a narrow screen.
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 DayPart.values().forEach { part ->
                     FilterChip(
                         selected = dayPart == part,
@@ -252,13 +256,15 @@ fun ReadingForm(
                 ChipButton(
                     text = stringResource(R.string.btn_cancel),
                     onClick = onCancel,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    stretch = true
                 )
                 ChipButton(
                     text = stringResource(R.string.btn_save),
                     onClick = { save() },
                     modifier = Modifier.weight(1f),
-                    selected = true
+                    selected = true,
+                    stretch = true
                 )
             }
         }

@@ -22,7 +22,7 @@
     <string name="pulse_value">pulse %1$d</string>
 
     <string name="col_date">Date</string>
-    <string name="col_part">AM / PM</string>
+    <string name="col_part">Time of day</string>
     <string name="col_systolic">Upper</string>
     <string name="col_diastolic">Lower</string>
     <string name="col_pulse">Pulse</string>
@@ -30,6 +30,8 @@
     <string name="col_note">Note</string>
     <string name="part_morning">Morning</string>
     <string name="part_evening">Evening</string>
+    <string name="part_noon">Noon</string>
+    <string name="part_night">Night</string>
 
     <string name="empty_readings">No entries of this type yet. Tap + to add a reading.</string>
     <string name="empty_meds">Your medicine list is empty. Tap + to add a medicine.</string>
@@ -117,7 +119,7 @@
     <string name="help_2_title">First steps</string>
     <string name="help_2_text">1. Open the Medicines tab and add your medicines: name, dose, when to take.\n2. Open the Readings tab and tap + to enter your first measurement.</string>
     <string name="help_3_title">Adding a reading</string>
-    <string name="help_3_text">Choose the measurement type and the time of day (morning or evening). Type the values, or tap the microphone icon at the right of a field and say the number. You can also dictate a whole phrase into the quick entry field, for example: "pressure 135 over 80 pulse 72" — the fields fill in by themselves. Tick the medicines you have taken and tap Save.</string>
+    <string name="help_3_text">Choose the measurement type and the time of day (morning, noon, evening or night). Type the values, or tap the microphone icon at the right of a field and say the number. You can also dictate a whole phrase into the quick entry field, for example: "pressure 135 over 80 pulse 72" — the fields fill in by themselves. Tick the medicines you have taken and tap Save.</string>
     <string name="help_4_title">Voice input</string>
     <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. Say numbers in digits or in words. For decimals (sugar, weight, temperature) say five point five, five comma five or 5 and 5, and you get 5.5. If a measurement type is already chosen, you can skip its name in the quick entry field: just say four point two. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
     <string name="help_5_title">The readings table</string>

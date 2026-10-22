@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 enum class ReadingType { PRESSURE, SUGAR, WEIGHT, TEMPERATURE, SPO2 }
 
-enum class DayPart { MORNING, EVENING }
+enum class DayPart { MORNING, NOON, EVENING, NIGHT }
 
 /**
  * One measurement. For PRESSURE: v1 = systolic, v2 = diastolic, pulse = optional.

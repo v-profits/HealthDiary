@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.healthdiary.R
@@ -172,7 +173,12 @@ private fun MedsTable(
                     ) {
                         TextCell(m.name, WName, MaterialTheme.typography.titleSmall)
                         TextCell(m.dose, WDose, MaterialTheme.typography.bodyMedium)
-                        TextCell(m.schedule, WWhen, MaterialTheme.typography.bodyMedium)
+                        TextCell(
+                            m.schedule,
+                            WWhen,
+                            MaterialTheme.typography.bodyMedium,
+                            singleLine = true
+                        )
                         TextCell(m.note, WNote, MaterialTheme.typography.bodySmall)
                         IconButton(onClick = { onEdit(m) }, modifier = Modifier.width(WAct)) {
                             Icon(
@@ -195,9 +201,19 @@ private fun MedsTable(
 }
 
 @Composable
-private fun TextCell(text: String, width: Dp, style: androidx.compose.ui.text.TextStyle) {
+private fun TextCell(
+    text: String,
+    width: Dp,
+    style: androidx.compose.ui.text.TextStyle,
+    singleLine: Boolean = false
+) {
     Box(modifier = Modifier.width(width).padding(horizontal = 8.dp)) {
-        Text(text, style = style)
+        Text(
+            text,
+            style = style,
+            maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -219,6 +235,7 @@ private fun MedDialog(initial: Medication, onSave: (Medication) -> Unit, onDismi
                     value = name,
                     onChange = { name = it },
                     label = stringResource(R.string.med_name),
+                    capitalizeFirst = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 VoiceField(

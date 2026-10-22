@@ -41,12 +41,20 @@ fun unitRes(t: ReadingType): Int = when (t) {
     ReadingType.SPO2 -> R.string.unit_spo2
 }
 
-fun partLabelRes(p: DayPart): Int =
-    if (p == DayPart.MORNING) R.string.part_morning else R.string.part_evening
+fun partLabelRes(p: DayPart): Int = when (p) {
+    DayPart.MORNING -> R.string.part_morning
+    DayPart.NOON -> R.string.part_noon
+    DayPart.EVENING -> R.string.part_evening
+    DayPart.NIGHT -> R.string.part_night
+}
 
-/** Before 14:00 the reading is proposed as "morning", later as "evening". */
-fun defaultDayPart(): DayPart =
-    if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 14) DayPart.MORNING else DayPart.EVENING
+/** Proposed time of day for a new reading: 5-11 morning, 11-16 noon, 16-22 evening, else night. */
+fun defaultDayPart(): DayPart = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+    in 5..10 -> DayPart.MORNING
+    in 11..15 -> DayPart.NOON
+    in 16..21 -> DayPart.EVENING
+    else -> DayPart.NIGHT
+}
 
 /** "135/80 mmHg, pulse 72" or "5.4 mmol/L". Used in the report for the doctor. */
 fun valueText(ctx: Context, r: Reading): String {

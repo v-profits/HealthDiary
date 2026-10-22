@@ -64,14 +64,21 @@ fun ChipButton(
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     danger: Boolean = false,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    stretch: Boolean = false
 ) {
     FilterChip(
         selected = selected,
         onClick = onClick,
         enabled = enabled,
         label = {
-            Text(text, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            Text(
+                text,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                // stretch = true: the chip is made wide by its parent (weight), center the text
+                modifier = if (stretch) Modifier.fillMaxWidth() else Modifier
+            )
         },
         modifier = modifier.heightIn(min = 40.dp),
         colors = if (danger) {
@@ -111,6 +118,7 @@ fun VoiceField(
     kind: FieldKind = FieldKind.TEXT,
     singleLine: Boolean = true,
     appendVoice: Boolean = true,
+    capitalizeFirst: Boolean = false,
     placeholder: String? = null
 ) {
     val ctx = LocalContext.current
@@ -124,9 +132,12 @@ fun VoiceField(
                 ?.firstOrNull()
             if (!heard.isNullOrBlank()) {
                 if (kind == FieldKind.TEXT) {
+                    // capitalizeFirst: a spoken medicine name starts with a capital letter
+                    val spoken =
+                        if (capitalizeFirst) heard.replaceFirstChar { it.uppercaseChar() } else heard
                     onChange(
                         if (appendVoice && value.isNotBlank()) value.trimEnd() + " " + heard
-                        else heard
+                        else spoken
                     )
                 } else {
                     val number = firstNumber(heard, kind == FieldKind.INTEGER)

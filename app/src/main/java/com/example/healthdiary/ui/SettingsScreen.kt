@@ -162,8 +162,10 @@ private fun <T> ChoiceButtons(
             ChipButton(
                 text = label,
                 onClick = { onSelect(value) },
-                modifier = Modifier.weight(1f),
-                selected = value == selected
+                // Wider chip for a longer name, so "Системная" fits on one line.
+                modifier = Modifier.weight(label.length + 3f),
+                selected = value == selected,
+                stretch = true
             )
         }
     }
