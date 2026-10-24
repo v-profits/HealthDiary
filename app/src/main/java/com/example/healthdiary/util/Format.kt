@@ -25,6 +25,27 @@ fun firstNumber(s: String, integerOnly: Boolean): String? {
     return re.find(text)?.value
 }
 
+private val sentenceStart = Regex("""([.!?]\s+)(\p{L})""")
+
+/**
+ * Spoken text: the first letter after ". ", "! " and "? " is a capital. The very first letter is
+ * a capital only when [startsSentence] is true (empty field, or the text before ends with . ! ?);
+ * otherwise the spoken text continues the sentence and keeps its first letter as it is.
+ * Digits and decimals ("4.2 мг") are not touched.
+ */
+fun capitalizeSentences(text: String, startsSentence: Boolean = true): String {
+    val t = text.trim()
+    if (t.isEmpty()) return t
+    val first = if (startsSentence) t.replaceFirstChar { it.uppercaseChar() } else t
+    return sentenceStart.replace(first) { it.groupValues[1] + it.groupValues[2].uppercase() }
+}
+
+/** True when text typed so far is empty or ends a sentence (. ! ?). */
+fun endsSentence(text: String): Boolean {
+    val t = text.trimEnd()
+    return t.isEmpty() || t.last() in ".!?"
+}
+
 fun typeLabelRes(t: ReadingType): Int = when (t) {
     ReadingType.PRESSURE -> R.string.type_pressure
     ReadingType.SUGAR -> R.string.type_sugar

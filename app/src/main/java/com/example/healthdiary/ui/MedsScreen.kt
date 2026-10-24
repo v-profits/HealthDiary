@@ -238,7 +238,6 @@ private fun MedDialog(initial: Medication, onSave: (Medication) -> Unit, onDismi
                     value = name,
                     onChange = { name = it },
                     label = stringResource(R.string.med_name),
-                    capitalizeFirst = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 VoiceField(

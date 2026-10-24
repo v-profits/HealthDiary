@@ -52,6 +52,7 @@
     <string name="quick_placeholder">pressure 135 over 80 pulse 72</string>
     <string name="quick_not_parsed">Phrase not understood. Enter the values in the fields below.</string>
     <string name="btn_voice_desc">Voice input</string>
+    <string name="clear_field">Clear text</string>
     <string name="voice_unavailable">Voice input is not available on this phone. Use the microphone on your keyboard instead.</string>
     <string name="voice_not_number">No number heard. Say the number in digits, for example: 135.</string>
     <string name="error_value">Please check the values you entered</string>
@@ -121,7 +122,7 @@
     <string name="help_3_title">Adding a reading</string>
     <string name="help_3_text">Choose the measurement type and the time of day (morning, noon, evening or night). Type the values, or tap the microphone icon at the right of a field and say the number. You can also dictate a whole phrase into the quick entry field, for example: "pressure 135 over 80 pulse 72" — the fields fill in by themselves. Tick the medicines you have taken and tap Save.</string>
     <string name="help_4_title">Voice input</string>
-    <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. Say numbers in digits or in words. For decimals (sugar, weight, temperature) say five point five, five comma five or 5 and 5, and you get 5.5. If a measurement type is already chosen, you can skip its name in the quick entry field: just say four point two. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
+    <string name="help_4_text">Every input field has a microphone icon at the right. It opens the speech recognition of your phone. In text fields spoken text is added after the text already there, with a capital letter at the start of the field and after . ! ? (a continued sentence stays lowercase), and a cross appears to erase the field. A number in a number field is replaced. Say numbers in digits or in words. For decimals (sugar, weight, temperature) say five point five, five comma five or 5 and 5, and you get 5.5. If a measurement type is already chosen, you can skip its name in the quick entry field: just say four point two. If your phone has no speech recognition, use the microphone key on your keyboard. Always check the recognized value before saving.</string>
     <string name="help_5_title">The readings table</string>
     <string name="help_5_text">The Readings tab shows entries as a table. Pick the measurement type at the top. If the table is wider than the screen, swipe it left or right. Units are shown in the column headers, the cells hold only values. The pencil edits an entry, the bin deletes it. The Clear button under the table deletes all entries of the chosen type at once, after you confirm. The Medicines tab works the same way: a table with the Clear button under it.</string>
     <string name="help_6_title">Sending to the doctor</string>

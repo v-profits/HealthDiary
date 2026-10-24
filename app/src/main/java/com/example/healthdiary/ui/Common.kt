@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
@@ -33,6 +35,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.healthdiary.R
+import com.example.healthdiary.util.capitalizeSentences
+import com.example.healthdiary.util.endsSentence
 import com.example.healthdiary.util.firstNumber
 
 @Composable
@@ -104,9 +108,11 @@ fun EmptyHint(text: String) {
 enum class FieldKind { TEXT, DECIMAL, INTEGER }
 
 /**
- * Text field with a microphone icon on the right. The icon opens the system speech recognizer;
- * the result goes into the field. In numeric fields only the first number of the phrase is kept.
- * A new voice input always replaces what was in the field.
+ * Text field with a microphone icon on the right. The icon opens the system speech recognizer.
+ * Text fields: the spoken text is added after the text already in the field; it starts with a
+ * capital letter only in an empty field or after ". ! ?", and has capitals after ". ! ?"; a cross appears when the field is not empty
+ * and clears it. Numeric fields: only the first number of the phrase is kept and it replaces
+ * the value.
  */
 @Composable
 fun VoiceField(
@@ -116,7 +122,6 @@ fun VoiceField(
     modifier: Modifier = Modifier,
     kind: FieldKind = FieldKind.TEXT,
     singleLine: Boolean = true,
-    capitalizeFirst: Boolean = false,
     placeholder: String? = null
 ) {
     val ctx = LocalContext.current
@@ -130,10 +135,9 @@ fun VoiceField(
                 ?.firstOrNull()
             if (!heard.isNullOrBlank()) {
                 if (kind == FieldKind.TEXT) {
-                    // capitalizeFirst: a spoken medicine name starts with a capital letter
-                    val spoken =
-                        if (capitalizeFirst) heard.replaceFirstChar { it.uppercaseChar() } else heard
-                    onChange(spoken)
+                    // Continues the sentence: no capital unless the text before ends with . ! ?
+                    val spoken = capitalizeSentences(heard, endsSentence(value))
+                    onChange(if (value.isBlank()) spoken else value.trimEnd() + " " + spoken)
                 } else {
                     val number = firstNumber(heard, kind == FieldKind.INTEGER)
                     if (number != null) {
@@ -190,11 +194,22 @@ fun VoiceField(
             }
         ),
         trailingIcon = {
-            IconButton(onClick = { startVoice() }) {
-                Icon(
-                    Icons.Default.Mic,
-                    contentDescription = stringResource(R.string.btn_voice_desc)
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // The cross is only in text fields (numbers are short, backspace is enough)
+                if (kind == FieldKind.TEXT && value.isNotEmpty()) {
+                    IconButton(onClick = { onChange("") }) {
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = stringResource(R.string.clear_field)
+                        )
+                    }
+                }
+                IconButton(onClick = { startVoice() }) {
+                    Icon(
+                        Icons.Default.Mic,
+                        contentDescription = stringResource(R.string.btn_voice_desc)
+                    )
+                }
             }
         },
         modifier = modifier
