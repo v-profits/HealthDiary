@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.healthdiary"
+    namespace = "com.semenenko.healthdiary"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.healthdiary"
+        applicationId = "com.semenenko.healthdiary"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -131,4 +131,14 @@
     <string name="help_7_text">Theme: system, light or dark. Language: system, Russian or English. All data is stored only on this phone and is lost if the app is deleted, so send the report to your doctor regularly.</string>
     <string name="help_8_title">Top bar and menu</string>
     <string name="help_8_text">The top bar shows the app name and what the current tab holds. The three-dot menu on the right gives quick access to: a new reading, sending to the doctor, this guide, settings and information about the app.</string>
+    <string name="rate_title">Rate the app</string>
+    <string name="rate_text">Your rating helps to make the app better.</string>
+    <string name="rate_star_desc">%1$d of 5</string>
+    <string name="rate_hint_store">The RuStore page will open.</string>
+    <string name="rate_hint_mail">A letter to the developer will open: tell us what to improve.</string>
+    <string name="rate_send">Rate</string>
+    <string name="rate_later">Later</string>
+    <string name="rate_no_app">No app found to open it</string>
+    <string name="rate_mail_subject">%1$s: feedback</string>
+    <string name="rate_mail_body">Rating: %1$d of 5\nVersion: %2$s\n\nWhat should be improved:\n</string>
 </resources>

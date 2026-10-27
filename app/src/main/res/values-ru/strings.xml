@@ -131,4 +131,14 @@
     <string name="help_7_text">Тема: системная, светлая или тёмная. Язык: системный, русский или английский. Все данные хранятся только на этом телефоне и пропадут при удалении приложения, поэтому регулярно отправляйте отчёт врачу.</string>
     <string name="help_8_title">Верхняя панель и меню</string>
     <string name="help_8_text">Вверху показано название приложения и сведения о текущей вкладке. Меню с тремя точками справа открывает быстрый доступ: новое показание, отправка врачу, эта инструкция, настройки и сведения о приложении.</string>
+    <string name="rate_title">Оцените приложение</string>
+    <string name="rate_text">Ваша оценка помогает сделать приложение лучше.</string>
+    <string name="rate_star_desc">%1$d из 5</string>
+    <string name="rate_hint_store">Откроется страница в RuStore.</string>
+    <string name="rate_hint_mail">Откроется письмо разработчику: напишите, что улучшить.</string>
+    <string name="rate_send">Оценить</string>
+    <string name="rate_later">Позже</string>
+    <string name="rate_no_app">Не нашлось приложения, чтобы это открыть</string>
+    <string name="rate_mail_subject">%1$s: отзыв</string>
+    <string name="rate_mail_body">Оценка: %1$d из 5\nВерсия: %2$s\n\nЧто нужно улучшить:\n</string>
 </resources>
