@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -387,7 +388,8 @@ private fun ReadingsTable(
             Row(
                 modifier = Modifier
                     .width(total)
-                    .padding(vertical = 6.dp),
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HeaderCell(stringResource(R.string.col_date), null, WDate)
@@ -418,10 +420,11 @@ private fun ReadingsTable(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(bottom = 8.dp)
             ) {
-                items(items, key = { it.id }) { r ->
+                itemsIndexed(items, key = { _, r -> r.id }) { idx, r ->
                     Row(
                         modifier = Modifier
                             .width(total)
+                            .background(rowColor(idx))
                             .heightIn(min = 56.dp)
                             .padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -494,6 +497,11 @@ private fun ReadingsTable(
     }
 }
 
+/** Same stripes as the table for the doctor: odd rows are tinted. */
+@Composable
+internal fun rowColor(index: Int) =
+    if (index % 2 == 1) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface
+
 @Composable
 internal fun HeaderCell(title: String, unit: String?, width: Dp) {
     Column(
@@ -506,14 +514,14 @@ internal fun HeaderCell(title: String, unit: String?, width: Dp) {
             title,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Center
         )
         if (unit != null) {
             Text(
                 unit,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center
             )
         }

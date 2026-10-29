@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -84,19 +86,31 @@ fun ChipButton(
         selected = selected,
         onClick = onClick,
         enabled = enabled,
-        leadingIcon = if (icon != null) {
-            { Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp)) }
-        } else {
-            null
-        },
         label = {
-            Text(
-                text,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                // stretch = true: the chip is made wide by its parent (weight), center the text
-                modifier = if (stretch) Modifier.fillMaxWidth() else Modifier
-            )
+            Box(
+                modifier = if (stretch) Modifier.fillMaxWidth() else Modifier,
+                contentAlignment = Alignment.Center
+            ) {
+                // The icon stays at the left edge, the text is centred in the whole chip.
+                if (icon != null) {
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        tint = if (danger) MaterialTheme.colorScheme.error else LocalContentColor.current,
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .offset(x = (-6).dp)
+                            .size(20.dp)
+                    )
+                }
+                Text(
+                    text,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    // Room for the icon when the chip is not stretched
+                    modifier = if (icon != null && !stretch) Modifier.padding(start = 22.dp) else Modifier
+                )
+            }
         },
         modifier = modifier.heightIn(min = 44.dp),
         shape = CircleShape,

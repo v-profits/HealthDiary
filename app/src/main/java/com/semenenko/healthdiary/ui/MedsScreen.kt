@@ -1,5 +1,6 @@
 package com.semenenko.healthdiary.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +14,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -146,13 +147,15 @@ private fun MedsTable(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .padding(top = 12.dp)
             .horizontalScroll(rememberScrollState())
     ) {
         Column(modifier = Modifier.width(total)) {
             Row(
                 modifier = Modifier
                     .width(total)
-                    .padding(vertical = 6.dp),
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HeaderCell(stringResource(R.string.col_med_name), null, WName)
@@ -167,10 +170,11 @@ private fun MedsTable(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(bottom = 8.dp)
             ) {
-                items(items, key = { it.id }) { m ->
+                itemsIndexed(items, key = { _, m -> m.id }) { idx, m ->
                     Row(
                         modifier = Modifier
                             .width(total)
+                            .background(rowColor(idx))
                             .heightIn(min = 56.dp)
                             .padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
