@@ -83,7 +83,8 @@ fun MedsScreen(
                         onClick = { askClear = true },
                         modifier = Modifier.fillMaxWidth(0.5f),
                         danger = true,
-                        stretch = true
+                        stretch = true,
+                        icon = Icons.Default.Delete
                     )
                 }
             }
@@ -210,10 +211,14 @@ private fun TextCell(
     style: androidx.compose.ui.text.TextStyle,
     singleLine: Boolean = false
 ) {
-    Box(modifier = Modifier.width(width).padding(horizontal = 8.dp)) {
+    Box(
+        modifier = Modifier.width(width).padding(horizontal = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
         Text(
             text,
             style = style,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             maxLines = if (singleLine) 1 else Int.MAX_VALUE,
             overflow = TextOverflow.Ellipsis
         )

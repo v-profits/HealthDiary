@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -75,12 +77,18 @@ fun ChipButton(
     selected: Boolean = false,
     danger: Boolean = false,
     enabled: Boolean = true,
-    stretch: Boolean = false
+    stretch: Boolean = false,
+    icon: ImageVector? = null
 ) {
     FilterChip(
         selected = selected,
         onClick = onClick,
         enabled = enabled,
+        leadingIcon = if (icon != null) {
+            { Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp)) }
+        } else {
+            null
+        },
         label = {
             Text(
                 text,

@@ -91,7 +91,7 @@ private fun PreviewTable(t: ReportTable) {
                         c,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = if (row.bold) FontWeight.Bold else FontWeight.Normal,
-                        textAlign = if (i in t.wide) TextAlign.Start else TextAlign.Center,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
                             .width(widths[i])
                             .padding(horizontal = 4.dp, vertical = 3.dp)

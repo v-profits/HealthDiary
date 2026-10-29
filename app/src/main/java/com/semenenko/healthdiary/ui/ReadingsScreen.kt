@@ -141,7 +141,8 @@ fun ReadingsScreen(
                             onClick = { askClear = true },
                             modifier = Modifier.fillMaxWidth(0.5f),
                             danger = true,
-                            stretch = true
+                            stretch = true,
+                            icon = Icons.Default.Delete
                         )
                     }
                 }
@@ -239,7 +240,8 @@ private fun ReadingsCards(
                     .padding(top = 12.dp)
                     .fillMaxWidth(0.5f),
                 danger = true,
-                stretch = true
+                stretch = true,
+                icon = Icons.Default.Delete
             )
         }
     }
@@ -425,15 +427,20 @@ private fun ReadingsTable(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Date with the exact time in small font under it.
-                        Column(modifier = Modifier.width(WDate).padding(horizontal = 8.dp)) {
+                        Column(
+                            modifier = Modifier.width(WDate).padding(horizontal = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Text(
                                 dateFmt.format(Date(r.timestamp)),
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
                             )
                             Text(
                                 timeFmt.format(Date(r.timestamp)),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
                             )
                         }
                         ValueCell(stringResource(partLabelRes(r.dayPart)), WPart, false)
@@ -445,13 +452,27 @@ private fun ReadingsTable(
                             ValueCell(fmt(r.v1), WSingle, true)
                         }
                         // Medicines taken: name and dose, one per line.
-                        Column(modifier = Modifier.width(WMeds).padding(horizontal = 8.dp)) {
+                        Column(
+                            modifier = Modifier.width(WMeds).padding(horizontal = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             splitMeds(r.meds).forEach { label ->
-                                Text(label, style = MaterialTheme.typography.bodySmall)
+                                Text(
+                                    label,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
-                        Box(modifier = Modifier.width(WNote).padding(horizontal = 8.dp)) {
-                            Text(r.note, style = MaterialTheme.typography.bodySmall)
+                        Box(
+                            modifier = Modifier.width(WNote).padding(horizontal = 8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                r.note,
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center
+                            )
                         }
                         IconButton(onClick = { onEdit(r) }, modifier = Modifier.width(WAct)) {
                             Icon(

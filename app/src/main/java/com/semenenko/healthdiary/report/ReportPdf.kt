@@ -128,9 +128,9 @@ object ReportPdf {
                 fill.color = if (row.bold) summary else if (idx % 2 == 1) zebra else Color.WHITE
                 w.canvas.drawRect(x, w.y, x + widths[i], w.y + h, fill)
                 w.canvas.drawRect(x, w.y, x + widths[i], w.y + h, stroke)
-                val isWide = i in t.wide
-                val cp = Paint(p).apply { textAlign = if (isWide) Paint.Align.LEFT else Paint.Align.CENTER }
-                val tx = if (isWide) x + PAD else x + widths[i] / 2f
+                // All text in the table is centred.
+                val cp = Paint(p).apply { textAlign = Paint.Align.CENTER }
+                val tx = x + widths[i] / 2f
                 cellLines[i].forEachIndexed { k, line ->
                     w.canvas.drawText(line, tx, w.y + PAD + LINE * (k + 1) - 2f, cp)
                 }

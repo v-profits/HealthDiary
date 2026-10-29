@@ -158,9 +158,5 @@
     <string name="rep_col_when">Дата, время</string>
     <string name="rep_col_part">Время суток</string>
     <string name="rep_col_value">Значение</string>
-    <string name="rep_avg">Среднее</string>
-    <string name="rep_min">Мин</string>
-    <string name="rep_max">Макс</string>
-    <string name="rep_all_day">Все</string>
     <string name="rep_page">стр. %1$d</string>
 </resources>

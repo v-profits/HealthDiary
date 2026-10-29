@@ -158,9 +158,5 @@
     <string name="rep_col_when">Date, time</string>
     <string name="rep_col_part">Time of day</string>
     <string name="rep_col_value">Value</string>
-    <string name="rep_avg">Average</string>
-    <string name="rep_min">Min</string>
-    <string name="rep_max">Max</string>
-    <string name="rep_all_day">All</string>
     <string name="rep_page">page %1$d</string>
 </resources>

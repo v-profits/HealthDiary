@@ -5,16 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -41,8 +42,7 @@ fun <T> DropdownSelect(
     options: List<Pair<T, String>>,
     selected: T,
     onSelect: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    label: String? = null
+    modifier: Modifier = Modifier
 ) {
     var open by remember { mutableStateOf(false) }
     val current = options.firstOrNull { it.first == selected }?.second ?: ""
@@ -58,9 +58,13 @@ fun <T> DropdownSelect(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(modifier = Modifier.weight(1f)) {
-                    FieldText(label, current)
-                }
+                Text(
+                    current,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
                 Icon(Icons.Default.ArrowDropDown, contentDescription = null)
             }
         }
@@ -83,21 +87,6 @@ fun <T> DropdownSelect(
     }
 }
 
-/** Small caption (if any) above the chosen value inside the drop-down. */
-@Composable
-private fun FieldText(label: String?, value: String) {
-    Column {
-        if (label != null) {
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Text(value, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-    }
-}
-
 /**
  * Several choices in one rounded frame (Cards | Table, Morning | Noon | Evening | Night).
  * The chosen part is filled with the accent colour.
@@ -107,7 +96,8 @@ fun <T> SegmentedRow(
     options: List<Pair<T, String>>,
     selected: T,
     onSelect: (T) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showCheck: Boolean = false
 ) {
     val primary = MaterialTheme.colorScheme.primary
     val outline = MaterialTheme.colorScheme.outline
@@ -128,15 +118,26 @@ fun <T> SegmentedRow(
                     .clickable { onSelect(value) },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = if (isSel) FontWeight.Bold else FontWeight.Normal,
-                    color = if (isSel) MaterialTheme.colorScheme.onPrimary
-                    else MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    textAlign = TextAlign.Center
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // The chosen part also gets a tick, so it is clear without colour too.
+                    if (isSel && showCheck) {
+                        Icon(
+                            Icons.Default.Check,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(18.dp).padding(end = 4.dp)
+                        )
+                    }
+                    Text(
+                        text,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = if (isSel) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isSel) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
             // A thin line between two parts that are not chosen.
             val nextSel = options.getOrNull(i + 1)?.first == selected

@@ -101,8 +101,8 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.titleMedium)
         DropdownSelect(
-            label = stringResource(R.string.settings_theme),
             options = listOf(
                 0 to stringResource(R.string.theme_system),
                 1 to stringResource(R.string.theme_light),
@@ -112,8 +112,8 @@ fun SettingsScreen(
             onSelect = onThemeChange
         )
 
+        Text(stringResource(R.string.settings_language), style = MaterialTheme.typography.titleMedium)
         DropdownSelect(
-            label = stringResource(R.string.settings_language),
             options = listOf(
                 "" to stringResource(R.string.lang_system),
                 "ru" to stringResource(R.string.lang_ru),

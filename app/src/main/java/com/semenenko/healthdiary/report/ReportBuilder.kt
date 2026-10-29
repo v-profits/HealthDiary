@@ -2,7 +2,6 @@ package com.semenenko.healthdiary.report
 
 import android.content.Context
 import com.semenenko.healthdiary.R
-import com.semenenko.healthdiary.data.DayPart
 import com.semenenko.healthdiary.data.Medication
 import com.semenenko.healthdiary.data.Reading
 import com.semenenko.healthdiary.data.ReadingType
@@ -17,7 +16,8 @@ import java.util.Locale
 
 /**
  * Builds the report for the doctor as tables: one table of medicines and one table per
- * measurement type. The same data is shown on screen, sent as PDF, or sent as plain text.
+ * measurement type. Only the entered values, no calculated figures such as averages.
+ * The same data is shown on screen, sent as PDF, or sent as plain text.
  */
 object ReportBuilder {
 
@@ -86,14 +86,6 @@ object ReportBuilder {
                 headers.add(ctx.getString(R.string.col_note))
             }
 
-            // Fills the columns after the values with medicines and note when they exist.
-            fun tail(meds: String?, note: String?): List<String> {
-                val t = ArrayList<String>()
-                if (hasMeds) t.add(meds ?: "")
-                if (hasNote) t.add(note ?: "")
-                return t
-            }
-
             val rows = ArrayList<ReportRow>()
             items.forEach { r ->
                 val cells = ArrayList<String>()
@@ -106,46 +98,11 @@ object ReportBuilder {
                 } else {
                     cells.add(fmt(r.v1))
                 }
-                cells.addAll(tail(splitMeds(r.meds).joinToString(", "), r.note.trim()))
+                if (hasMeds) cells.add(splitMeds(r.meds).joinToString(", "))
+                if (hasNote) cells.add(r.note.trim())
                 rows.add(ReportRow(cells))
             }
 
-            if (items.size > 1) {
-                if (pressure) {
-                    fun avgRow(label: String, part: String, group: List<Reading>): ReportRow {
-                        val pulses = group.mapNotNull { it.pulse }
-                        val cells = arrayListOf(
-                            label,
-                            part,
-                            fmt(round(group.map { it.v1 }.average())),
-                            group.mapNotNull { it.v2 }.takeIf { it.isNotEmpty() }
-                                ?.let { fmt(round(it.average())) } ?: "",
-                            if (pulses.isEmpty()) "" else fmt(round(pulses.average()))
-                        )
-                        cells.addAll(tail(null, null))
-                        return ReportRow(cells, bold = true)
-                    }
-                    rows.add(avgRow(ctx.getString(R.string.rep_avg), ctx.getString(R.string.rep_all_day), items))
-                    // Morning and evening averages are what a doctor compares first.
-                    DayPart.values().forEach { part ->
-                        val g = items.filter { it.dayPart == part }
-                        if (g.isNotEmpty() && g.size < items.size) {
-                            rows.add(avgRow(ctx.getString(R.string.rep_avg), ctx.getString(partLabelRes(part)), g))
-                        }
-                    }
-                } else {
-                    val v = items.map { it.v1 }
-                    listOf(
-                        R.string.rep_avg to round1(v.average()),
-                        R.string.rep_min to v.min(),
-                        R.string.rep_max to v.max()
-                    ).forEach { (label, value) ->
-                        val cells = arrayListOf(ctx.getString(label), "", fmt(value))
-                        cells.addAll(tail(null, null))
-                        rows.add(ReportRow(cells, bold = true))
-                    }
-                }
-            }
             tables.add(
                 ReportTable(
                     title = ctx.getString(typeLabelRes(type)),
@@ -180,8 +137,4 @@ object ReportBuilder {
         sb.append(d.footer)
         return sb.toString().trimEnd()
     }
-
-    private fun round(x: Double): Double = Math.round(x).toDouble()
-
-    private fun round1(x: Double): Double = Math.round(x * 10.0) / 10.0
 }

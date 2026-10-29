@@ -77,19 +77,17 @@ fun SendScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            listOf(
-                7 to R.string.period_7,
-                14 to R.string.period_14,
-                30 to R.string.period_30,
-                0 to R.string.period_all
-            ).forEach { (value, label) ->
-                AppChip(days == value, { days = value }, stringResource(label))
-            }
-        }
+        SegmentedRow(
+            options = listOf(
+                7 to stringResource(R.string.period_7),
+                14 to stringResource(R.string.period_14),
+                30 to stringResource(R.string.period_30),
+                0 to stringResource(R.string.period_all)
+            ),
+            selected = days,
+            onSelect = { days = it },
+            showCheck = true
+        )
 
         Card(
             modifier = Modifier
