@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Capsule: one half filled, the other an outline -->
+    <group
+        android:pivotX="12"
+        android:pivotY="12"
+        android:rotation="-45">
+        <path
+            android:fillColor="#000000"
+            android:pathData="M6.5,7.5H12V16.5H6.5A4.5,4.5 0 0 1 6.5,7.5Z" />
+        <path
+            android:pathData="M12,7.5H17.5A4.5,4.5 0 0 1 17.5,16.5H12Z"
+            android:strokeColor="#000000"
+            android:strokeWidth="1.6" />
+    </group>
+</vector>

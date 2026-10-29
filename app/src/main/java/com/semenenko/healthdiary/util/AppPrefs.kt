@@ -17,6 +17,9 @@ object AppPrefs {
     const val KEY_LANG = "lang"
 
     /** How many times the app was opened, and whether the user has rated it already. */
+    /** 0 = cards, 1 = table (view of the readings list). */
+    const val KEY_VIEW = "readings_view"
+
     const val KEY_LAUNCHES = "launches"
     const val KEY_RATED = "rated"
 

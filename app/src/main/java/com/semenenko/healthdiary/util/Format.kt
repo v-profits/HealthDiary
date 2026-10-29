@@ -46,6 +46,37 @@ fun endsSentence(text: String): Boolean {
     return t.isEmpty() || t.last() in ".!?"
 }
 
+/** Informational status of a measurement, shown as a coloured stripe. Not a diagnosis. */
+enum class Level { NONE, NORMAL, ELEVATED, HIGH }
+
+fun levelOf(r: Reading): Level = when (r.type) {
+    ReadingType.PRESSURE -> {
+        val s = r.v1
+        val d = r.v2 ?: 0.0
+        when {
+            s >= 140 || d >= 90 -> Level.HIGH
+            s >= 130 || d >= 85 || s < 100 || (d in 1.0..59.9) -> Level.ELEVATED
+            else -> Level.NORMAL
+        }
+    }
+    ReadingType.SUGAR -> when {
+        r.v1 >= 7.0 || r.v1 < 3.9 -> Level.HIGH
+        r.v1 >= 5.6 -> Level.ELEVATED
+        else -> Level.NORMAL
+    }
+    ReadingType.SPO2 -> when {
+        r.v1 < 92 -> Level.HIGH
+        r.v1 < 95 -> Level.ELEVATED
+        else -> Level.NORMAL
+    }
+    ReadingType.TEMPERATURE -> when {
+        r.v1 >= 38.0 -> Level.HIGH
+        r.v1 >= 37.3 || r.v1 < 35.5 -> Level.ELEVATED
+        else -> Level.NORMAL
+    }
+    ReadingType.WEIGHT -> Level.NONE
+}
+
 fun typeLabelRes(t: ReadingType): Int = when (t) {
     ReadingType.PRESSURE -> R.string.type_pressure
     ReadingType.SUGAR -> R.string.type_sugar

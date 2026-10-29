@@ -100,9 +100,7 @@
     <string name="report_period">Period: %1$s – %2$s</string>
     <string name="report_period_all">Period: all entries</string>
     <string name="report_meds">Medicines:</string>
-    <string name="report_readings">Readings:</string>
     <string name="report_none">no data</string>
-    <string name="report_avg">Average: %1$s</string>
     <string name="report_footer">Entered by the patient in the Health Diary app. This is not a medical conclusion.</string>
 
     <string name="settings_theme">Theme</string>
@@ -141,4 +139,28 @@
     <string name="rate_no_app">No app found to open it</string>
     <string name="rate_mail_subject">%1$s: feedback</string>
     <string name="rate_mail_body">Rating: %1$d of 5\nVersion: %2$s\n\nWhat should be improved:\n</string>
+    <string name="view_cards">Cards</string>
+    <string name="view_table">Table</string>
+    <string name="day_today">Today</string>
+    <string name="day_yesterday">Yesterday</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_data_hint">Save all readings and medicines to a file or load them from a file, for example when you change the phone.</string>
+    <string name="btn_export">Export</string>
+    <string name="btn_import">Import</string>
+    <string name="import_confirm">All current readings and medicines will be replaced with the data from the file. Continue?</string>
+    <string name="export_done">Data saved to the file</string>
+    <string name="export_failed">Could not save the file</string>
+    <string name="import_bad_file">This is not a data file of the app, nothing was changed</string>
+    <string name="import_done">Loaded readings: %1$d, medicines: %2$d</string>
+    <string name="btn_send_pdf">Send PDF</string>
+    <string name="btn_send_text">As text</string>
+    <string name="pdf_failed">Could not create the PDF</string>
+    <string name="rep_col_when">Date, time</string>
+    <string name="rep_col_part">Time of day</string>
+    <string name="rep_col_value">Value</string>
+    <string name="rep_avg">Average</string>
+    <string name="rep_min">Min</string>
+    <string name="rep_max">Max</string>
+    <string name="rep_all_day">All</string>
+    <string name="rep_page">page %1$d</string>
 </resources>

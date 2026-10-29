@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -129,32 +128,18 @@ fun ReadingForm(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                ReadingType.values().forEach { t ->
-                    FilterChip(
-                        selected = type == t,
-                        onClick = { type = t },
-                        label = { Text(stringResource(typeLabelRes(t))) }
-                    )
-                }
-            }
+            DropdownSelect(
+                options = ReadingType.values().map { it to stringResource(typeLabelRes(it)) },
+                selected = type,
+                onSelect = { type = it }
+            )
 
-            // Morning / noon / evening / night; wraps to a second line on a narrow screen.
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                DayPart.values().forEach { part ->
-                    FilterChip(
-                        selected = dayPart == part,
-                        onClick = { dayPart = part },
-                        label = { Text(stringResource(partLabelRes(part))) }
-                    )
-                }
-            }
+            // Morning / noon / evening / night in one frame.
+            SegmentedRow(
+                options = DayPart.values().map { it to stringResource(partLabelRes(it)) },
+                selected = dayPart,
+                onSelect = { dayPart = it }
+            )
 
             VoiceField(
                 value = quick,
@@ -223,14 +208,14 @@ fun ReadingForm(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     labels.forEach { label ->
-                        FilterChip(
+                        AppChip(
                             selected = label in selected,
                             onClick = {
                                 val next = if (label in selected) selected - label
                                 else selected + label
                                 taken = next.joinToString(MEDS_SEP)
                             },
-                            label = { Text(label) }
+                            text = label
                         )
                     }
                 }

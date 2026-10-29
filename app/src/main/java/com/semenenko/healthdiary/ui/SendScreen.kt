@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -39,6 +38,13 @@ import com.semenenko.healthdiary.R
 import com.semenenko.healthdiary.data.Medication
 import com.semenenko.healthdiary.data.Reading
 import com.semenenko.healthdiary.report.ReportBuilder
+import com.semenenko.healthdiary.report.ReportData
+import com.semenenko.healthdiary.report.ReportPdf
+import androidx.core.content.FileProvider
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun SendScreen(
@@ -51,8 +57,8 @@ fun SendScreen(
     var days by rememberSaveable { mutableIntStateOf(7) }
     var name by remember { mutableStateOf(patientName) }
 
-    val report = remember(readings, meds, name, days) {
-        ReportBuilder.build(ctx, name, days, readings, meds)
+    val data = remember(readings, meds, name, days) {
+        ReportBuilder.data(ctx, name, days, readings, meds)
     }
 
     Column(
@@ -81,11 +87,7 @@ fun SendScreen(
                 30 to R.string.period_30,
                 0 to R.string.period_all
             ).forEach { (value, label) ->
-                FilterChip(
-                    selected = days == value,
-                    onClick = { days = value },
-                    label = { Text(stringResource(label)) }
-                )
+                AppChip(days == value, { days = value }, stringResource(label))
             }
         }
 
@@ -94,26 +96,27 @@ fun SendScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = report,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(12.dp)
-            )
+            ReportPreview(data)
         }
 
+        // The PDF has real columns; the text variant is for chats that cannot show a file.
+        ChipButton(
+            text = stringResource(R.string.btn_send_pdf),
+            onClick = { sharePdf(ctx, data) },
+            modifier = Modifier.fillMaxWidth(),
+            selected = true,
+            stretch = true
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ChipButton(
-                text = stringResource(R.string.btn_share),
-                onClick = { shareReport(ctx, report) },
+                text = stringResource(R.string.btn_send_text),
+                onClick = { shareText(ctx, ReportBuilder.toText(ctx, data)) },
                 modifier = Modifier.weight(1f),
-                selected = true,
                 stretch = true
             )
             ChipButton(
                 text = stringResource(R.string.btn_copy),
-                onClick = { copyReport(ctx, report) },
+                onClick = { copyReport(ctx, ReportBuilder.toText(ctx, data)) },
                 modifier = Modifier.weight(1f),
                 stretch = true
             )
@@ -126,7 +129,28 @@ fun SendScreen(
     }
 }
 
-private fun shareReport(ctx: Context, report: String) {
+private fun sharePdf(ctx: Context, data: ReportData) {
+    try {
+        val dir = File(ctx.cacheDir, "reports")
+        dir.mkdirs()
+        dir.listFiles()?.forEach { it.delete() }
+        val stamp = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        val file = File(dir, "dnevnik_$stamp.pdf")
+        ReportPdf.write(ctx, data, file)
+        val uri = FileProvider.getUriForFile(ctx, ctx.packageName + ".fileprovider", file)
+        val send = Intent(Intent.ACTION_SEND).apply {
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            clipData = ClipData.newRawUri("", uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        ctx.startActivity(Intent.createChooser(send, ctx.getString(R.string.share_via)))
+    } catch (e: Exception) {
+        Toast.makeText(ctx, R.string.pdf_failed, Toast.LENGTH_LONG).show()
+    }
+}
+
+private fun shareText(ctx: Context, report: String) {
     val send = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, report)

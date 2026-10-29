@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -40,15 +41,20 @@ import com.semenenko.healthdiary.util.endsSentence
 import com.semenenko.healthdiary.util.firstNumber
 
 @Composable
-fun ConfirmDialog(text: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+fun ConfirmDialog(
+    text: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    confirmText: String? = null
+) {
     AlertDialog(
         onDismissRequest = onDismiss,
         text = { Text(text) },
         confirmButton = {
             ChipButton(
-                text = stringResource(R.string.btn_delete),
+                text = confirmText ?: stringResource(R.string.btn_delete),
                 onClick = onConfirm,
-                danger = true
+                danger = confirmText == null
             )
         },
         dismissButton = {
@@ -84,12 +90,32 @@ fun ChipButton(
                 modifier = if (stretch) Modifier.fillMaxWidth() else Modifier
             )
         },
-        modifier = modifier.heightIn(min = 40.dp),
+        modifier = modifier.heightIn(min = 44.dp),
+        shape = CircleShape,
         colors = if (danger) {
             FilterChipDefaults.filterChipColors(labelColor = MaterialTheme.colorScheme.error)
         } else {
-            FilterChipDefaults.filterChipColors()
+            FilterChipDefaults.filterChipColors(
+                selectedContainerColor = MaterialTheme.colorScheme.primary,
+                selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+            )
         }
+    )
+}
+
+/** Pill-shaped choice chip (type, time of day, period, medicines): filled with the accent when chosen. */
+@Composable
+fun AppChip(selected: Boolean, onClick: () -> Unit, text: String) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(text) },
+        modifier = Modifier.heightIn(min = 40.dp),
+        shape = CircleShape,
+        colors = FilterChipDefaults.filterChipColors(
+            selectedContainerColor = MaterialTheme.colorScheme.primary,
+            selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+        )
     )
 }
 

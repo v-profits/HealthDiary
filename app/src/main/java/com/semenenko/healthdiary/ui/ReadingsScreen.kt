@@ -1,7 +1,11 @@
 package com.semenenko.healthdiary.ui
 
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,19 +13,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,12 +50,15 @@ import androidx.compose.ui.unit.dp
 import com.semenenko.healthdiary.R
 import com.semenenko.healthdiary.data.Reading
 import com.semenenko.healthdiary.data.ReadingType
+import com.semenenko.healthdiary.util.Level
 import com.semenenko.healthdiary.util.fmt
+import com.semenenko.healthdiary.util.levelOf
 import com.semenenko.healthdiary.util.partLabelRes
 import com.semenenko.healthdiary.util.splitMeds
 import com.semenenko.healthdiary.util.typeLabelRes
 import com.semenenko.healthdiary.util.unitRes
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -66,6 +76,8 @@ fun ReadingsScreen(
     readings: List<Reading>,
     type: ReadingType,
     onTypeChange: (ReadingType) -> Unit,
+    view: Int,
+    onViewChange: (Int) -> Unit,
     onAdd: () -> Unit,
     onEdit: (Reading) -> Unit,
     onDelete: (Reading) -> Unit,
@@ -77,47 +89,61 @@ fun ReadingsScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                ReadingType.values().forEach { t ->
-                    FilterChip(
-                        selected = type == t,
-                        onClick = { onTypeChange(t) },
-                        label = { Text(stringResource(typeLabelRes(t))) }
-                    )
-                }
-            }
+            // Measurement type: a drop-down list.
+            DropdownSelect(
+                options = ReadingType.values().map { it to stringResource(typeLabelRes(it)) },
+                selected = type,
+                onSelect = onTypeChange,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            // Two ways to look at the same data, in one frame: cards by day or a swipeable table.
+            SegmentedRow(
+                options = listOf(
+                    0 to stringResource(R.string.view_cards),
+                    1 to stringResource(R.string.view_table)
+                ),
+                selected = view,
+                onSelect = onViewChange,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
             if (shown.isEmpty()) {
                 EmptyHint(stringResource(R.string.empty_readings))
             } else {
-                ReadingsTable(
-                    items = shown,
-                    type = type,
-                    onEdit = onEdit,
-                    onDelete = { toDelete = it },
-                    modifier = Modifier.weight(1f)
-                )
-                // Under the table: removes all entries of the shown type at once.
-                // The height leaves room for the "+" button on the right.
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 88.dp)
-                        .padding(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Half of the screen wide, so it stays clear of the "+" button on the right.
-                    ChipButton(
-                        text = stringResource(R.string.btn_clear),
-                        onClick = { askClear = true },
-                        modifier = Modifier.fillMaxWidth(0.5f),
-                        danger = true,
-                        stretch = true
+                if (view == 0) {
+                    ReadingsCards(
+                        items = shown,
+                        type = type,
+                        onEdit = onEdit,
+                        onDelete = { toDelete = it },
+                        onClear = { askClear = true },
+                        modifier = Modifier.weight(1f)
                     )
+                } else {
+                    ReadingsTable(
+                        items = shown,
+                        type = type,
+                        onEdit = onEdit,
+                        onDelete = { toDelete = it },
+                        modifier = Modifier.weight(1f)
+                    )
+                    // Under the table: removes all entries of the shown type at once.
+                    // The height leaves room for the "+" button on the right.
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 88.dp)
+                            .padding(start = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Half of the screen wide, so it stays clear of the "+" button on the right.
+                        ChipButton(
+                            text = stringResource(R.string.btn_clear),
+                            onClick = { askClear = true },
+                            modifier = Modifier.fillMaxWidth(0.5f),
+                            danger = true,
+                            stretch = true
+                        )
+                    }
                 }
             }
         }
@@ -126,7 +152,10 @@ fun ReadingsScreen(
             onClick = onAdd,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(16.dp),
+            shape = CircleShape,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_reading))
         }
@@ -155,6 +184,178 @@ fun ReadingsScreen(
                 askClear = false
             },
             onDismiss = { askClear = false }
+        )
+    }
+}
+
+@Composable
+private fun ReadingsCards(
+    items: List<Reading>,
+    type: ReadingType,
+    onEdit: (Reading) -> Unit,
+    onDelete: (Reading) -> Unit,
+    onClear: () -> Unit,
+    modifier: Modifier
+) {
+    // Newest day first, inside a day the newest reading first.
+    val groups = remember(items) {
+        items.sortedByDescending { it.timestamp }.groupBy { dayStart(it.timestamp) }.toList()
+    }
+    val timeFmt = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
+    val longFmt = remember { SimpleDateFormat("d MMMM, EEEE", Locale.getDefault()) }
+    val today = remember { dayStart(System.currentTimeMillis()) }
+    val yesterday = today - 24L * 3_600_000L
+
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        // The bottom gap keeps the last card clear of the "+" button.
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        groups.forEach { (day, list) ->
+            item(key = "day$day") {
+                val title = when (day) {
+                    today -> stringResource(R.string.day_today)
+                    yesterday -> stringResource(R.string.day_yesterday)
+                    else -> longFmt.format(Date(day)).replaceFirstChar { it.uppercaseChar() }
+                }
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 10.dp, start = 4.dp)
+                )
+            }
+            items(list, key = { it.id }) { r ->
+                ReadingCard(r, type, timeFmt.format(Date(r.timestamp)), onEdit, onDelete)
+            }
+        }
+        item(key = "clear") {
+            ChipButton(
+                text = stringResource(R.string.btn_clear),
+                onClick = onClear,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .fillMaxWidth(0.5f),
+                danger = true,
+                stretch = true
+            )
+        }
+    }
+}
+
+private fun dayStart(ts: Long): Long {
+    val c = Calendar.getInstance()
+    c.timeInMillis = ts
+    c.set(Calendar.HOUR_OF_DAY, 0)
+    c.set(Calendar.MINUTE, 0)
+    c.set(Calendar.SECOND, 0)
+    c.set(Calendar.MILLISECOND, 0)
+    return c.timeInMillis
+}
+
+@Composable
+private fun ReadingCard(
+    r: Reading,
+    type: ReadingType,
+    time: String,
+    onEdit: (Reading) -> Unit,
+    onDelete: (Reading) -> Unit
+) {
+    val stripe = when (levelOf(r)) {
+        Level.NORMAL -> LevelColors.normal
+        Level.ELEVATED -> LevelColors.elevated
+        Level.HIGH -> LevelColors.high
+        Level.NONE -> MaterialTheme.colorScheme.outlineVariant
+    }
+    val value = if (type == ReadingType.PRESSURE) fmt(r.v1) + "/" + (r.v2?.let { fmt(it) } ?: "?")
+    else fmt(r.v1)
+    val unit = stringResource(unitRes(type))
+
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+            Box(
+                modifier = Modifier
+                    .width(8.dp)
+                    .fillMaxHeight()
+                    .background(stripe)
+            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp, top = 10.dp, bottom = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        value,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        unit,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 6.dp, bottom = 3.dp)
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Tag(stringResource(partLabelRes(r.dayPart)) + " · " + time, true)
+                    r.pulse?.let {
+                        Tag(stringResource(R.string.pulse_value, it), false)
+                    }
+                }
+                splitMeds(r.meds).forEach { label -> Tag("💊 $label", false) }
+                if (r.note.isNotBlank()) {
+                    Text(
+                        r.note,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Column {
+                IconButton(onClick = { onEdit(r) }) {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.edit_reading),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                IconButton(onClick = { onDelete(r) }) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.btn_delete),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** Small rounded label inside a card. [accent] fills it with the theme colour. */
+@Composable
+private fun Tag(text: String, accent: Boolean) {
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = if (accent) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.labelMedium,
+            color = if (accent) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
         )
     }
 }

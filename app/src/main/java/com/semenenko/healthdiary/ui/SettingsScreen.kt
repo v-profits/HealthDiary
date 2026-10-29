@@ -3,6 +3,9 @@ package com.semenenko.healthdiary.ui
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.semenenko.healthdiary.R
+import com.semenenko.healthdiary.util.Backup
 
 private fun Context.findActivity(): Activity? {
     var c: Context = this
@@ -73,10 +78,21 @@ fun SettingsScreen(
     themeMode: Int,
     onThemeChange: (Int) -> Unit,
     language: String,
-    onLanguageChange: (String) -> Unit
+    onLanguageChange: (String) -> Unit,
+    onExport: (Uri) -> Unit,
+    onImport: (Uri) -> Unit
 ) {
     val ctx = LocalContext.current
     var helpOpen by rememberSaveable { mutableStateOf(false) }
+    // The file chosen for import waits here until the user confirms the replacement.
+    var pendingImport by remember { mutableStateOf<Uri?>(null) }
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { uri -> if (uri != null) onExport(uri) }
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> if (uri != null) pendingImport = uri }
 
     Column(
         modifier = Modifier
@@ -85,8 +101,8 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.titleMedium)
-        ChoiceButtons(
+        DropdownSelect(
+            label = stringResource(R.string.settings_theme),
             options = listOf(
                 0 to stringResource(R.string.theme_system),
                 1 to stringResource(R.string.theme_light),
@@ -96,13 +112,8 @@ fun SettingsScreen(
             onSelect = onThemeChange
         )
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
-        Text(
-            stringResource(R.string.settings_language),
-            style = MaterialTheme.typography.titleMedium
-        )
-        ChoiceButtons(
+        DropdownSelect(
+            label = stringResource(R.string.settings_language),
             options = listOf(
                 "" to stringResource(R.string.lang_system),
                 "ru" to stringResource(R.string.lang_ru),
@@ -110,13 +121,35 @@ fun SettingsScreen(
             ),
             selected = language,
             onSelect = { value ->
-                if (value != language) {
-                    onLanguageChange(value)
-                    // The language is applied when the screen is created again.
-                    ctx.findActivity()?.recreate()
-                }
+                onLanguageChange(value)
+                // The language is applied when the screen is created again.
+                ctx.findActivity()?.recreate()
             }
         )
+
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+        // Backup of all data to a file and back.
+        Text(stringResource(R.string.settings_data), style = MaterialTheme.typography.titleMedium)
+        Text(
+            stringResource(R.string.settings_data_hint),
+            style = MaterialTheme.typography.bodySmall
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ChipButton(
+                text = stringResource(R.string.btn_export),
+                onClick = { exportLauncher.launch(Backup.fileName()) },
+                modifier = Modifier.weight(1f),
+                selected = true,
+                stretch = true
+            )
+            ChipButton(
+                text = stringResource(R.string.btn_import),
+                onClick = { importLauncher.launch(arrayOf("*/*")) },
+                modifier = Modifier.weight(1f),
+                stretch = true
+            )
+        }
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
@@ -145,28 +178,16 @@ fun SettingsScreen(
             modifier = Modifier.padding(top = 8.dp)
         )
     }
-}
 
-/** A row of equal chip buttons, the same look as "Morning / Evening"; the chosen one is filled. */
-@Composable
-private fun <T> ChoiceButtons(
-    options: List<Pair<T, String>>,
-    selected: T,
-    onSelect: (T) -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        options.forEach { (value, label) ->
-            ChipButton(
-                text = label,
-                onClick = { onSelect(value) },
-                // Wider chip for a longer name, so "Системная" fits on one line.
-                modifier = Modifier.weight(label.length + 3f),
-                selected = value == selected,
-                stretch = true
-            )
-        }
+    pendingImport?.let { uri ->
+        ConfirmDialog(
+            text = stringResource(R.string.import_confirm),
+            confirmText = stringResource(R.string.btn_import),
+            onConfirm = {
+                onImport(uri)
+                pendingImport = null
+            },
+            onDismiss = { pendingImport = null }
+        )
     }
 }

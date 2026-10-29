@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- The PDF report is written here and handed to the messenger through FileProvider -->
+    <cache-path name="reports" path="reports/" />
+</paths>

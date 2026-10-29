@@ -100,9 +100,7 @@
     <string name="report_period">Период: %1$s – %2$s</string>
     <string name="report_period_all">Период: все записи</string>
     <string name="report_meds">Лекарства:</string>
-    <string name="report_readings">Показания:</string>
     <string name="report_none">нет данных</string>
-    <string name="report_avg">Среднее: %1$s</string>
     <string name="report_footer">Данные внесены пациентом в приложении «Дневник здоровья». Это не медицинское заключение.</string>
 
     <string name="settings_theme">Тема</string>
@@ -141,4 +139,28 @@
     <string name="rate_no_app">Не нашлось приложения, чтобы это открыть</string>
     <string name="rate_mail_subject">%1$s: отзыв</string>
     <string name="rate_mail_body">Оценка: %1$d из 5\nВерсия: %2$s\n\nЧто нужно улучшить:\n</string>
+    <string name="view_cards">Карточки</string>
+    <string name="view_table">Таблица</string>
+    <string name="day_today">Сегодня</string>
+    <string name="day_yesterday">Вчера</string>
+    <string name="settings_data">Данные</string>
+    <string name="settings_data_hint">Сохраните все записи и лекарства в файл или загрузите их из файла, например при смене телефона.</string>
+    <string name="btn_export">Экспорт</string>
+    <string name="btn_import">Импорт</string>
+    <string name="import_confirm">Все текущие записи и лекарства будут заменены данными из файла. Продолжить?</string>
+    <string name="export_done">Данные сохранены в файл</string>
+    <string name="export_failed">Не удалось сохранить файл</string>
+    <string name="import_bad_file">Это не файл данных приложения, ничего не изменено</string>
+    <string name="import_done">Загружено записей: %1$d, лекарств: %2$d</string>
+    <string name="btn_send_pdf">Отправить PDF</string>
+    <string name="btn_send_text">Текстом</string>
+    <string name="pdf_failed">Не удалось создать PDF</string>
+    <string name="rep_col_when">Дата, время</string>
+    <string name="rep_col_part">Время суток</string>
+    <string name="rep_col_value">Значение</string>
+    <string name="rep_avg">Среднее</string>
+    <string name="rep_min">Мин</string>
+    <string name="rep_max">Макс</string>
+    <string name="rep_all_day">Все</string>
+    <string name="rep_page">стр. %1$d</string>
 </resources>

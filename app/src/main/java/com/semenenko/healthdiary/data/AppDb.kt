@@ -39,6 +39,22 @@ interface DiaryDao {
 
     @Query("DELETE FROM medications")
     suspend fun deleteAllMedications()
+
+    // Export and import of all data
+    @Query("SELECT * FROM readings ORDER BY timestamp")
+    suspend fun allReadings(): List<Reading>
+
+    @Query("SELECT * FROM medications ORDER BY id")
+    suspend fun allMedications(): List<Medication>
+
+    @Query("DELETE FROM readings")
+    suspend fun deleteAllReadings()
+
+    @Insert
+    suspend fun insertReadings(list: List<Reading>)
+
+    @Insert
+    suspend fun insertMedications(list: List<Medication>)
 }
 
 /** v1 -> v2: morning/evening and the medicines taken were added to every reading. */

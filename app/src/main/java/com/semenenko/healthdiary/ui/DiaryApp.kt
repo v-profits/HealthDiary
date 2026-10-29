@@ -1,7 +1,10 @@
 package com.semenenko.healthdiary.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.semenenko.healthdiary.R
@@ -47,6 +51,7 @@ fun DiaryApp(vm: DiaryViewModel) {
     val themeMode by vm.themeMode.collectAsState()
     val language by vm.language.collectAsState()
     val ratingDue by vm.ratingDue.collectAsState()
+    val readingsView by vm.readingsView.collectAsState()
 
     var tab by rememberSaveable { mutableIntStateOf(0) }
     // null = form closed, 0 = new reading, other = id of the reading being edited
@@ -73,12 +78,12 @@ fun DiaryApp(vm: DiaryViewModel) {
         return
     }
 
-    // Tab icons are text resources: change them in res/values/tab_icons.xml.
+    // Tab icons are vector files res/drawable/ic_tab_*.xml: replace them as you like.
     val tabs = listOf(
-        R.string.tab_icon_readings to R.string.tab_readings,
-        R.string.tab_icon_meds to R.string.tab_meds,
-        R.string.tab_icon_send to R.string.tab_send,
-        R.string.tab_icon_settings to R.string.tab_settings
+        R.drawable.ic_tab_readings to R.string.tab_readings,
+        R.drawable.ic_tab_meds to R.string.tab_meds,
+        R.drawable.ic_tab_send to R.string.tab_send,
+        R.drawable.ic_tab_settings to R.string.tab_settings
     )
 
     // The line under the app name tells what the current tab holds.
@@ -92,7 +97,13 @@ fun DiaryApp(vm: DiaryViewModel) {
 
     Scaffold(
         topBar = {
+            Box(modifier = Modifier.background(headerBrush())) {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White
+                ),
                 title = {
                     Column {
                         Text(
@@ -151,6 +162,7 @@ fun DiaryApp(vm: DiaryViewModel) {
                     }
                 }
             )
+            }
         },
         bottomBar = {
             NavigationBar {
@@ -158,7 +170,7 @@ fun DiaryApp(vm: DiaryViewModel) {
                     NavigationBarItem(
                         selected = tab == index,
                         onClick = { tab = index },
-                        icon = { Text(stringResource(icon)) },
+                        icon = { Icon(painterResource(icon), contentDescription = null) },
                         label = { Text(stringResource(label)) }
                     )
                 }
@@ -171,6 +183,8 @@ fun DiaryApp(vm: DiaryViewModel) {
                     readings = readings,
                     type = listType,
                     onTypeChange = { listType = it },
+                    view = readingsView,
+                    onViewChange = vm::setReadingsView,
                     onAdd = { formId = 0L },
                     onEdit = { formId = it.id },
                     onDelete = vm::deleteReading,
@@ -192,7 +206,9 @@ fun DiaryApp(vm: DiaryViewModel) {
                     themeMode = themeMode,
                     onThemeChange = vm::setThemeMode,
                     language = language,
-                    onLanguageChange = vm::setLanguage
+                    onLanguageChange = vm::setLanguage,
+                    onExport = vm::exportTo,
+                    onImport = vm::importFrom
                 )
             }
         }
